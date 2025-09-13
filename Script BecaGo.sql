@@ -72,7 +72,9 @@ create table Notificacion(
 		references Actividad(idActividad)
 );
 
-select * from Administrador
+select * from Administrador;
+
+select * from Estudiante;
 
 
 

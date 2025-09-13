@@ -9,29 +9,61 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Register</title>
+        <script>
+            function checkCorreo() {
+                const correo = document.getElementById("correo").value;
+                const deptoField = document.getElementById("deptoField");
+                const extraFields = document.getElementById("extraFields");
+                
+                const tieneNumeros = /\d/.test(correo);
+
+                if (!tieneNumeros) {
+                    deptoField.style.display = "block";
+                    extraFields.style.display = "none";
+                } else {
+                    deptoField.style.display = "none";
+                    extraFields.style.display = "block";
+                }
+            }
+
+        </script>
     </head>
     <body>
-        <h1><a>Register</a></h1>
-        <form action="Controlador?menu=Administrador" method="POST">
+        <h1>Register</h1>
+        <form action="Controlador?menu=Admin-Estudiante" method="POST">
             <label>Nombre</label>
-            <input type="text" name="txtNombre" placeholder="Nombre">
-            <br>
+            <input type="text" name="txtNombre" placeholder="Nombre"><br>
+
             <label>Apellido</label>
-            <input type="text" name="txtApellido" placeholder="Apellido">
-            <br>
+            <input type="text" name="txtApellido" placeholder="Apellido"><br>
+
             <label>Teléfono</label>
-            <input type="text" name="txtTelefono" placeholder="Teléfono">
-            <br>            
+            <input type="text" name="txtTelefono" placeholder="Teléfono"><br>            
+
             <label>Correo</label>
-            <input type="text" name="txtCorreo" placeholder="Correo electrónico">
-            <br>
+            <input type="text" id="correo" name="txtCorreo" placeholder="Correo electrónico" onkeyup="checkCorreo()"><br>            
+
             <label>Password</label>
-            <input type="password" name="txtPassword" placeholder="Password">
-            <br>
-            <label>Nombre Departamento</label>
-            <input type="text" name="txtDepartamento" placeholder="Departamento UVG">
-            <button type="submit" name="accion" value="Agregar">Crear cuenta</button>
+            <input type="password" name="txtPassword" placeholder="Password"><br>
+
+            <div id="deptoField" style="display:none;">
+                <label>Nombre Departamento</label>
+                <input type="text" name="txtDepartamento" placeholder="Departamento UVG"><br>
+
+                <button type="submit" name="accion" value="Agregar Admin">Crear cuenta</button>
+            </div>
+
+            <div id="extraFields" style="display:none;">
+                <label>Carrera</label>
+                <input type="text" name="txtCarrera" placeholder="Carrera"><br>
+                <label>Horas Asignadas</label>
+                <input type="number" name="txtHorasAsignadas" placeholder="Cantidad de horas Asignadas"><br>
+
+                <button type="submit" name="accion" value="Agregar Estudiante">Crear cuenta</button>
+            </div>
+
+
         </form>
     </body>
 </html>

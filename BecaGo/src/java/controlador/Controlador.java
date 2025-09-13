@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modelo.Administrador;
+import modelo.Estudiante;
 import modeloDAO.AdministradorDAO;
+import modeloDAO.EstudianteDAO;
 
 /**
  *
@@ -26,6 +28,8 @@ public class Controlador extends HttpServlet {
     
     Administrador administrador=new Administrador();
     AdministradorDAO administradorDAO=new AdministradorDAO();
+    Estudiante estudiante=new Estudiante();
+    EstudianteDAO estudianteDAO=new EstudianteDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,8 +49,8 @@ public class Controlador extends HttpServlet {
             request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
         } else if(menu.equals("Register")) {
             request.getRequestDispatcher("vistas/Register.jsp").forward(request, response);
-        }else if(menu.equals("Administrador")){
-            if(accion.equals("Agregar")){
+        }else if(menu.equals("Admin-Estudiante")){
+            if(accion.equals("Agregar Admin")){
                 String nombreAdmin=request.getParameter("txtNombre");
                 String apellidoAdmin=request.getParameter("txtApellido");
                 String telefonoAdmin=request.getParameter("txtTelefono");
@@ -60,8 +64,27 @@ public class Controlador extends HttpServlet {
                 administrador.setCorreoAdmin(correoAdmin);
                 administrador.setPasswordAdmin(passwordAdmin);
                 administrador.setNombreDepartamento(departamentoAdmin);
-                administradorDAO.Agregar(administrador);
+                administradorDAO.Agregar(administrador);      
+                request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
                 
+            }else if(accion.equals("Agregar Estudiante")){
+                String nombreEstudiante=request.getParameter("txtNombre");
+                String apellidoEstudiante=request.getParameter("txtApellido");
+                String telefonoEstudiante=request.getParameter("txtTelefono");
+                String correoEstudiante=request.getParameter("txtCorreo");
+                String passwordEstudiante=request.getParameter("txtPassword");
+                String carreraEstudiante=request.getParameter("txtCarrera");
+                int horasAsignadas = Integer.parseInt(request.getParameter("txtHorasAsignadas"));
+
+                estudiante.setNombreEstudiante(nombreEstudiante);
+                estudiante.setApellidoEstudiante(apellidoEstudiante);
+                estudiante.setTelefono(telefonoEstudiante);
+                estudiante.setCorreoEstudiante(correoEstudiante);
+                estudiante.setPasswordEstudiante(passwordEstudiante);
+                estudiante.setCarrera(carreraEstudiante);
+                estudiante.setHorasAsignadas(horasAsignadas);
+                estudianteDAO.Agregar(estudiante);
+                request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
             }
         }
 
