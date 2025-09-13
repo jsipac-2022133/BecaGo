@@ -11,6 +11,7 @@ use db_becago;
 create table Administrador(
 	idAdmin int not null auto_increment,
     nombreAdmin varchar(100) not null,
+    apellidoAdmin varchar(100) not null,
     telefono varchar(20) not null,
     correoAdmin varchar(150) unique not null,
     passwordAdmin varchar(150) not null,
@@ -20,11 +21,10 @@ create table Administrador(
 
 create table Estudiante(
 	idEstudiante int not null auto_increment,
-    carnet varchar(100) unique not null,
     nombreEstudiante varchar(150) not null,
     apellidoEstudiante varchar(150) not null,
     telefono varchar(20) not null,
-    correoEstudiante varchar(100) unique not null,
+    correoEstudiante varchar(100) unique not null,     
     passwordEstudiante varchar(150) not null,
     carrera varchar(150) not null,
     horasAsignadas int not null,
@@ -72,7 +72,7 @@ create table Notificacion(
 		references Actividad(idActividad)
 );
 
-
+select * from Administrador
 
 
 
