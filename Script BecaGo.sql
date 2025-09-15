@@ -73,9 +73,10 @@ create table Notificacion(
 );
 
 select * from Administrador;
+delete from Administrador where idAdmin=1;
 
 select * from Estudiante;
-
+delete from Estudiante where idEstudiante=1;
 
 
 

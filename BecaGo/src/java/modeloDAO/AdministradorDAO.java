@@ -40,5 +40,29 @@ public class AdministradorDAO {
         }
         return resp;
     }
+    
+    public Administrador validar(String correo, String password){
+        Administrador admin=new Administrador();
+        String sql="select * from Administrador where correoAdmin=? and passwordAdmin=?";
+        try {
+            con=cn.Conexion();
+            ps=con.prepareStatement(sql);
+            ps.setString(1, correo);
+            ps.setString(2, password);
+            rs=ps.executeQuery();
+            while(rs.next()){
+                admin.setIdAdmin(rs.getInt("idAdmin"));
+                admin.setNombreAdmin(rs.getString("nombreAdmin"));
+                admin.setApellidoAdmin(rs.getString("apellidoAdmin"));
+                admin.setTelefono(rs.getString("telefono"));
+                admin.setCorreoAdmin(rs.getString("correoAdmin"));
+                admin.setPasswordAdmin(rs.getString("passwordAdmin"));
+                admin.setNombreDepartamento(rs.getString("nombreDepartamento"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return admin;
+    }
    
 }

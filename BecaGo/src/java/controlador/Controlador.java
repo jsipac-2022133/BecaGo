@@ -25,11 +25,11 @@ import modeloDAO.EstudianteDAO;
 @WebServlet(name = "Controlador", urlPatterns = ("/Controlador"))
 @MultipartConfig
 public class Controlador extends HttpServlet {
-    
-    Administrador administrador=new Administrador();
-    AdministradorDAO administradorDAO=new AdministradorDAO();
-    Estudiante estudiante=new Estudiante();
-    EstudianteDAO estudianteDAO=new EstudianteDAO();
+
+    Administrador administrador = new Administrador();
+    AdministradorDAO administradorDAO = new AdministradorDAO();
+    Estudiante estudiante = new Estudiante();
+    EstudianteDAO estudianteDAO = new EstudianteDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,33 +47,33 @@ public class Controlador extends HttpServlet {
 
         if (menu == null || menu.equals("Login")) {
             request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
-        } else if(menu.equals("Register")) {
+        } else if (menu.equals("Register")) {
             request.getRequestDispatcher("vistas/Register.jsp").forward(request, response);
-        }else if(menu.equals("Admin-Estudiante")){
-            if(accion.equals("Agregar Admin")){
-                String nombreAdmin=request.getParameter("txtNombre");
-                String apellidoAdmin=request.getParameter("txtApellido");
-                String telefonoAdmin=request.getParameter("txtTelefono");
-                String correoAdmin=request.getParameter("txtCorreo");
-                String passwordAdmin=request.getParameter("txtPassword");
-                String departamentoAdmin=request.getParameter("txtDepartamento");
-                
+        } else if (menu.equals("Admin-Estudiante")) {
+            if (accion.equals("Agregar Admin")) {
+                String nombreAdmin = request.getParameter("txtNombre");
+                String apellidoAdmin = request.getParameter("txtApellido");
+                String telefonoAdmin = request.getParameter("txtTelefono");
+                String correoAdmin = request.getParameter("txtCorreo");
+                String passwordAdmin = request.getParameter("txtPassword");
+                String departamentoAdmin = request.getParameter("txtDepartamento");
+
                 administrador.setNombreAdmin(nombreAdmin);
                 administrador.setApellidoAdmin(apellidoAdmin);
                 administrador.setTelefono(telefonoAdmin);
                 administrador.setCorreoAdmin(correoAdmin);
                 administrador.setPasswordAdmin(passwordAdmin);
                 administrador.setNombreDepartamento(departamentoAdmin);
-                administradorDAO.Agregar(administrador);      
-                request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
-                
-            }else if(accion.equals("Agregar Estudiante")){
-                String nombreEstudiante=request.getParameter("txtNombre");
-                String apellidoEstudiante=request.getParameter("txtApellido");
-                String telefonoEstudiante=request.getParameter("txtTelefono");
-                String correoEstudiante=request.getParameter("txtCorreo");
-                String passwordEstudiante=request.getParameter("txtPassword");
-                String carreraEstudiante=request.getParameter("txtCarrera");
+                administradorDAO.Agregar(administrador);
+                request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
+
+            } else if (accion.equals("Agregar Estudiante")) {
+                String nombreEstudiante = request.getParameter("txtNombre");
+                String apellidoEstudiante = request.getParameter("txtApellido");
+                String telefonoEstudiante = request.getParameter("txtTelefono");
+                String correoEstudiante = request.getParameter("txtCorreo");
+                String passwordEstudiante = request.getParameter("txtPassword");
+                String carreraEstudiante = request.getParameter("txtCarrera");
                 int horasAsignadas = Integer.parseInt(request.getParameter("txtHorasAsignadas"));
 
                 estudiante.setNombreEstudiante(nombreEstudiante);
@@ -84,7 +84,27 @@ public class Controlador extends HttpServlet {
                 estudiante.setCarrera(carreraEstudiante);
                 estudiante.setHorasAsignadas(horasAsignadas);
                 estudianteDAO.Agregar(estudiante);
-                request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
+                request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
+            }
+        } else if (menu.equals("Validar")) {
+            if (accion.equals("Login")) {
+                String correo = request.getParameter("txtCorreo");
+                String password = request.getParameter("txtPassword");
+                if (correo.matches(".*\\d.*")) {
+                    estudiante=estudianteDAO.validar(correo, password);
+                    if(estudiante.getCorreoEstudiante()!= null){
+                       request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
+                    }else{
+                        request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
+                    }
+                } else {
+                    administrador=administradorDAO.validar(correo, password);
+                    if(administrador.getCorreoAdmin()!=null){
+                        request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
+                    }else{
+                        request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
+                    }
+                }
             }
         }
 

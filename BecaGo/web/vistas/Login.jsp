@@ -13,12 +13,12 @@
     </head>
     <body>
         <h1><a>Login</a></h1>
-        <form method="POST">
-            <label>Usuario</label>
-            <input type="text" name="txtUser" placeholder="usuario">
+        <form action="Controlador?menu=Validar" method="POST">
+            <label>Correo Electrónico</label>
+            <input type="text" name="txtCorreo" placeholder="Correo Electrónico">
             <label>Password</label>
-            <input type="password" name="txtPass" placeholder="password">
-            <button>Login</button>
+            <input type="password" name="txtPassword" placeholder="Password">
+            <button type="submit" name="accion" value="Login">Login</button>
             <p>No tienes cuenta? <a href="Controlador?menu=Register">Registrarse</a></p>
             
         </form>

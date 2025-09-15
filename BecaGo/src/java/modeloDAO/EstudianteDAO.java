@@ -44,5 +44,31 @@ public class EstudianteDAO {
         return resp;
     }
     
+    public Estudiante validar(String correo, String password){
+        Estudiante estudiante=new Estudiante();
+        String sql="select * from Estudiante where correoEstudiante=? and passwordEstudiante=?";
+        try {
+            con=cn.Conexion();
+            ps=con.prepareStatement(sql);
+            ps.setString(1, correo);
+            ps.setString(2, password);
+            rs=ps.executeQuery();
+            while(rs.next()){
+                estudiante.setIdEstudiante(rs.getInt("idEstudiante"));
+                estudiante.setNombreEstudiante(rs.getString("nombreEstudiante"));
+                estudiante.setApellidoEstudiante(rs.getString("apellidoEstudiante"));
+                estudiante.setTelefono(rs.getString("telefono"));
+                estudiante.setCorreoEstudiante(rs.getString("correoEstudiante"));
+                estudiante.setPasswordEstudiante(rs.getString("passwordEstudiante"));
+                estudiante.setCarrera(rs.getString("carrera"));
+                estudiante.setHorasAsignadas(rs.getInt("horasAsignadas"));
+                estudiante.setHorasCumplidas(rs.getInt("horasCumplidas"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return estudiante;
+    }
+    
     
 }
