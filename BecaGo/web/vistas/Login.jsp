@@ -16,9 +16,12 @@
         <form action="Controlador?menu=Validar" method="POST">
             <label>Correo Electrónico</label>
             <input type="text" name="txtCorreo" placeholder="Correo Electrónico">
+            <br>
             <label>Password</label>
             <input type="password" name="txtPassword" placeholder="Password">
+            <br>
             <button type="submit" name="accion" value="Login">Login</button>
+            <br>
             <p>No tienes cuenta? <a href="Controlador?menu=Register">Registrarse</a></p>
             
         </form>
