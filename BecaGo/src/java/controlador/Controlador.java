@@ -149,12 +149,35 @@ public class Controlador extends HttpServlet {
                     actividad.setCuposDisponibles(cuposDisponibles);
                     actividad.setIdAdmin(idAdmin);
 
-                    actividadDAO.Agregar(actividad);
+                    actividadDAO.agregar(actividad);
                 
                 }if(accion.equals("Editar")){
                     idActividad=Integer.parseInt(request.getParameter("idActividad"));
                     Actividad actividadEncontrada=actividadDAO.buscarActividad(idActividad);
                     request.setAttribute("actividadEncontrada", actividadEncontrada);
+                    System.out.println(idActividad);
+                
+                }if(accion.equals("Actualizar")){
+                    String nombreActividad = request.getParameter("txtNombreActividad");
+                    String descripcion = request.getParameter("txtDescripcion");
+                    String fechaString = request.getParameter("txtFechaActividad");
+                    LocalDateTime ldt = LocalDateTime.parse(fechaString);
+                    Timestamp fechaActividad = Timestamp.valueOf(ldt);
+                    String ubicacion = request.getParameter("txtUbicacion");
+                    double horasDadas = Double.parseDouble(request.getParameter("txtHorasDadas"));
+                    int cuposDisponibles = Integer.parseInt(request.getParameter("txtCuposDisponibles"));
+                    int idAdmin = adminEnSesion.getIdAdmin();
+                    System.out.println(idActividad);
+                    
+                    actividad.setNombreActividad(nombreActividad);
+                    actividad.setDescripcion(descripcion);
+                    actividad.setFechaActividad(fechaActividad);
+                    actividad.setUbicacion(ubicacion);
+                    actividad.setHorasDadas(horasDadas);
+                    actividad.setCuposDisponibles(cuposDisponibles);
+                    actividad.setIdAdmin(idAdmin);
+                    actividad.setIdActividad(idActividad);
+                    actividadDAO.actualizar(actividad);
                 }
                 
             }

@@ -28,13 +28,13 @@
             <input value="${actividadEncontrada.getUbicacion()}" type="text" name="txtUbicacion" placeholder="Ubicación de encuentro">
             <br>
             <label>Horas dadas</label>
-            <input value="${actividadEncontrada.getHorasDadas()}" type="number" name="txtHorasDadas" placeholder="Horas dadas al finalizar actividad">
+            <input value="${actividadEncontrada.getHorasDadas()}" type="number" name="txtHorasDadas" placeholder="Horas dadas al finalizar actividad" step="0.01">
             <br>
             <label>Cupos disponibles</label>
             <input value="${actividadEncontrada.getCuposDisponibles()}" type="number" name="txtCuposDisponibles" placeholder="Cupos disponibles">
             <br>
             <button type="submit" name="accion" value="Agregar">Agregar</button>
-
+            <button type="submit" name="accion" value="Actualizar">Actualizar</button>
         </form>
         <br>
         <br>

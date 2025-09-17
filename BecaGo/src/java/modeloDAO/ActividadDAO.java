@@ -25,7 +25,7 @@ public class ActividadDAO {
     ResultSet rs;
     int resp;
 
-    public int Agregar(Actividad actividad) {
+    public int agregar(Actividad actividad) {
         String sql = "insert into Actividad(nombreActividad, descripcion, "
                 + "fechaActividad, ubicacion, horasDadas, cuposDisponibles, idAdmin) values(?,?,?,?,?,?,?)";
 
@@ -101,4 +101,26 @@ public class ActividadDAO {
         return actividad;
     }
 
+    public int actualizar(Actividad actividad){
+        String sql="Update Actividad set nombreActividad=?, descripcion=?, fechaActividad=?, ubicacion=?, "
+                + "horasDadas=?, cuposDisponibles=?, idAdmin=? where idActividad=?";
+        
+        try {
+            con=cn.Conexion();
+            ps=con.prepareStatement(sql);
+            ps.setString(1, actividad.getNombreActividad());
+            ps.setString(2, actividad.getDescripcion());
+            ps.setTimestamp(3, actividad.getFechaActividad());
+            ps.setString(4, actividad.getUbicacion());
+            ps.setDouble(5, actividad.getHorasDadas());
+            ps.setInt(6, actividad.getCuposDisponibles());
+            ps.setInt(7, actividad.getIdAdmin());
+            ps.setInt(8, actividad.getIdActividad());
+            resp=ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resp;
+    }
+    
 }
