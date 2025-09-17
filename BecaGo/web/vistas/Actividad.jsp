@@ -4,6 +4,7 @@
     Author     : SIPAC
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -35,5 +36,42 @@
             <button type="submit" name="accion" value="Agregar">Agregar</button>
 
         </form>
+        <br>
+        <br>
+        <br>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Fecha</th>
+                    <th>Ubicación</th>
+                    <th>Horas Dadas</th>
+                    <th>Cupos Disponibles</th>
+                    <th>Id Admin</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="actividad" items="${actividades}">
+                    <tr>
+                        <td>${actividad.getIdActividad()}</td>
+                        <td>${actividad.getNombreActividad()}</td>
+                        <td>${actividad.getDescripcion()}</td>
+                        <td>${actividad.getFechaActividad()}</td>
+                        <td>${actividad.getUbicacion()}</td>
+                        <td>${actividad.getHorasDadas()}</td>
+                        <td>${actividad.getCuposDisponibles()}</td>
+                        <td>${actividad.getIdAdmin()}</td>                        
+                        <td>
+                            <a>Editar</a>
+                            <a>Eliminar</a>
+                        </td>
+                    </tr>
+                </c:forEach>
+
+            </tbody>
+        </table>
     </body>
 </html>

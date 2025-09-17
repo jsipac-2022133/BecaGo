@@ -9,6 +9,8 @@ import config.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import modelo.Actividad;
 
 /**
@@ -16,19 +18,20 @@ import modelo.Actividad;
  * @author SIPAC
  */
 public class ActividadDAO {
-    Conexion cn=new Conexion();
+
+    Conexion cn = new Conexion();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
     int resp;
-    
-    public int Agregar(Actividad actividad){
-        String sql="insert into Actividad(nombreActividad, descripcion, "
+
+    public int Agregar(Actividad actividad) {
+        String sql = "insert into Actividad(nombreActividad, descripcion, "
                 + "fechaActividad, ubicacion, horasDadas, cuposDisponibles, idAdmin) values(?,?,?,?,?,?,?)";
-        
+
         try {
-            con=cn.Conexion();
-            ps=con.prepareStatement(sql);
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
             ps.setString(1, actividad.getNombreActividad());
             ps.setString(2, actividad.getDescripcion());
             ps.setTimestamp(3, actividad.getFechaActividad());
@@ -36,11 +39,42 @@ public class ActividadDAO {
             ps.setDouble(5, actividad.getHorasDadas());
             ps.setInt(6, actividad.getCuposDisponibles());
             ps.setInt(7, actividad.getIdAdmin());
-            resp=ps.executeUpdate();
+            resp = ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return resp;
     }
-    
+
+    public List<Actividad> listar() {
+        String sql = "select idActividad, nombreActividad, descripcion, fechaActividad, "
+                + "ubicacion, horasDadas, cuposDisponibles, idAdmin from Actividad";
+        
+        
+        List<Actividad> listaActividad = new ArrayList<>();
+        try {
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Actividad actividad = new Actividad();
+                actividad.setIdActividad(rs.getInt("idActividad"));
+                actividad.setNombreActividad(rs.getString("nombreActividad"));
+                actividad.setDescripcion(rs.getString("descripcion"));
+                actividad.setFechaActividad(rs.getTimestamp("fechaActividad"));
+                actividad.setUbicacion(rs.getString("ubicacion"));
+                actividad.setHorasDadas(rs.getDouble("horasDadas"));
+                actividad.setCuposDisponibles(rs.getInt("cuposDisponibles"));
+                actividad.setIdAdmin(rs.getInt("idAdmin"));
+                listaActividad.add(actividad);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listaActividad;
+    }
+
 }

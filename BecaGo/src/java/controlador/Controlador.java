@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -36,8 +37,8 @@ public class Controlador extends HttpServlet {
     AdministradorDAO administradorDAO = new AdministradorDAO();
     Estudiante estudiante = new Estudiante();
     EstudianteDAO estudianteDAO = new EstudianteDAO();
-    Actividad actividad=new Actividad();
-    ActividadDAO actividadDAO=new ActividadDAO();
+    Actividad actividad = new Actividad();
+    ActividadDAO actividadDAO = new ActividadDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,13 +53,10 @@ public class Controlador extends HttpServlet {
             throws ServletException, IOException {
         String menu = request.getParameter("menu");
         String accion = request.getParameter("accion");
-        
+
         //Apartado para obtener la sesión del usuario, no tocar xd
         HttpSession sessionActiva = request.getSession(false);
-        Administrador adminEnSesion=(Administrador) sessionActiva.getAttribute("administradorEnSesion");
-        
-        
-        
+        Administrador adminEnSesion = (Administrador) sessionActiva.getAttribute("administradorEnSesion");
 
         if (menu == null || menu.equals("Login")) {
             request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
@@ -115,8 +113,13 @@ public class Controlador extends HttpServlet {
                 } else {
                     administrador = administradorDAO.validar(correo, password);
                     if (administrador.getCorreoAdmin() != null) {
-                        HttpSession session=request.getSession();
+                        HttpSession session = request.getSession();
                         session.setAttribute("administradorEnSesion", administrador);
+                        ///////////////////////////
+                        //Este apartado es para que liste Actividad luego del login
+                        List<Actividad> listaActividad = actividadDAO.listar();
+                        request.setAttribute("actividades", listaActividad);
+                        //////////////////////////
                         request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
                     } else {
                         request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
@@ -124,31 +127,36 @@ public class Controlador extends HttpServlet {
                 }
             }
         } else if (menu.equals("Actividad")) {
-            if (accion.equals("Agregar")) {
-                String nombreActividad = request.getParameter("txtNombreActividad");
-                String descripcion = request.getParameter("txtDescripcion");
-                String fechaString = request.getParameter("txtFechaActividad"); 
-                LocalDateTime ldt = LocalDateTime.parse(fechaString);
-                Timestamp fechaActividad = Timestamp.valueOf(ldt);
-                String ubicacion=request.getParameter("txtUbicacion");
-                double horasDadas=Double.parseDouble(request.getParameter("txtHorasDadas"));
-                int cuposDisponibles=Integer.parseInt(request.getParameter("txtCuposDisponibles"));
-                int idAdmin=adminEnSesion.getIdAdmin();
-                
-                actividad.setNombreActividad(nombreActividad);
-                actividad.setDescripcion(descripcion);
-                actividad.setFechaActividad(fechaActividad);
-                actividad.setUbicacion(ubicacion);
-                actividad.setHorasDadas(horasDadas);
-                actividad.setCuposDisponibles(cuposDisponibles);
-                actividad.setIdAdmin(idAdmin);
-                
-                actividadDAO.Agregar(actividad);
-                request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
-                
-               
 
+            if (accion != null) {
+                if (accion.equals("Agregar")) {
+                    String nombreActividad = request.getParameter("txtNombreActividad");
+                    String descripcion = request.getParameter("txtDescripcion");
+                    String fechaString = request.getParameter("txtFechaActividad");
+                    LocalDateTime ldt = LocalDateTime.parse(fechaString);
+                    Timestamp fechaActividad = Timestamp.valueOf(ldt);
+                    String ubicacion = request.getParameter("txtUbicacion");
+                    double horasDadas = Double.parseDouble(request.getParameter("txtHorasDadas"));
+                    int cuposDisponibles = Integer.parseInt(request.getParameter("txtCuposDisponibles"));
+                    int idAdmin = adminEnSesion.getIdAdmin();
+
+                    actividad.setNombreActividad(nombreActividad);
+                    actividad.setDescripcion(descripcion);
+                    actividad.setFechaActividad(fechaActividad);
+                    actividad.setUbicacion(ubicacion);
+                    actividad.setHorasDadas(horasDadas);
+                    actividad.setCuposDisponibles(cuposDisponibles);
+                    actividad.setIdAdmin(idAdmin);
+
+                    actividadDAO.Agregar(actividad);
+                }
+                
             }
+            
+            List<Actividad> listaActividad = actividadDAO.listar();
+            request.setAttribute("actividades", listaActividad);
+
+            request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
         }
 
     }
