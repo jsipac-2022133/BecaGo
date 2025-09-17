@@ -46,10 +46,10 @@ public class ActividadDAO {
         return resp;
     }
 
+    
     public List<Actividad> listar() {
         String sql = "select idActividad, nombreActividad, descripcion, fechaActividad, "
-                + "ubicacion, horasDadas, cuposDisponibles, idAdmin from Actividad";
-        
+                + "ubicacion, horasDadas, cuposDisponibles, idAdmin from Actividad";        
         
         List<Actividad> listaActividad = new ArrayList<>();
         try {
@@ -75,6 +75,30 @@ public class ActividadDAO {
             e.printStackTrace();
         }
         return listaActividad;
+    }
+    
+    public Actividad buscarActividad(int id){
+        Actividad actividad=new Actividad();
+        String sql = "select idActividad, nombreActividad, descripcion, fechaActividad, "
+                + "ubicacion, horasDadas, cuposDisponibles, idAdmin from Actividad where idActividad="+id;       
+        try {
+            con=cn.Conexion();
+            ps=con.prepareStatement(sql);
+            rs=ps.executeQuery();
+            while(rs.next()){
+                actividad.setIdActividad(rs.getInt("idActividad"));
+                actividad.setNombreActividad(rs.getString("nombreActividad"));
+                actividad.setDescripcion(rs.getString("descripcion"));
+                actividad.setFechaActividad(rs.getTimestamp("fechaActividad"));
+                actividad.setUbicacion(rs.getString("ubicacion"));
+                actividad.setHorasDadas(rs.getDouble("horasDadas"));
+                actividad.setCuposDisponibles(rs.getInt("cuposDisponibles"));
+                actividad.setIdAdmin(rs.getInt("idAdmin"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return actividad;
     }
 
 }

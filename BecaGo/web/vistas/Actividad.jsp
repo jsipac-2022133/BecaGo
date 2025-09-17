@@ -16,22 +16,22 @@
         <h1><a>Agregar Actividad</a></h1>
         <form action="Controlador?menu=Actividad" method="POST">
             <label>Nombre actividad</label>
-            <input type="text" name="txtNombreActividad" placeholder="Nombre Actividad">
+            <input value="${actividadEncontrada.getNombreActividad()}" type="text" name="txtNombreActividad" placeholder="Nombre Actividad">
             <br>
             <label>Descripción</label>
-            <textarea name="txtDescripcion" placeholder="Escribe la descripción de la actividad" rows="5" cols="50"></textarea>
+            <input value="${actividadEncontrada.getDescripcion()}" name="txtDescripcion" type="text" placeholder="Escribe la descripción de la actividad">            
             <br>
             <label>Fecha</label>
-            <input type="datetime-local" name="txtFechaActividad">
+            <input value="${actividadEncontrada.getFechaActividad()}" type="datetime-local" name="txtFechaActividad">
             <br>
             <label>Ubicación</label>
-            <input type="text" name="txtUbicacion" placeholder="Ubicación de encuentro">
+            <input value="${actividadEncontrada.getUbicacion()}" type="text" name="txtUbicacion" placeholder="Ubicación de encuentro">
             <br>
             <label>Horas dadas</label>
-            <input type="number" name="txtHorasDadas" placeholder="Horas dadas al finalizar actividad">
+            <input value="${actividadEncontrada.getHorasDadas()}" type="number" name="txtHorasDadas" placeholder="Horas dadas al finalizar actividad">
             <br>
             <label>Cupos disponibles</label>
-            <input type="number" name="txtCuposDisponibles" placeholder="Cupos disponibles">
+            <input value="${actividadEncontrada.getCuposDisponibles()}" type="number" name="txtCuposDisponibles" placeholder="Cupos disponibles">
             <br>
             <button type="submit" name="accion" value="Agregar">Agregar</button>
 
@@ -65,7 +65,7 @@
                         <td>${actividad.getCuposDisponibles()}</td>
                         <td>${actividad.getIdAdmin()}</td>                        
                         <td>
-                            <a>Editar</a>
+                            <a href="Controlador?menu=Actividad&accion=Editar&idActividad=${actividad.getIdActividad()}">Editar</a>
                             <a>Eliminar</a>
                         </td>
                     </tr>

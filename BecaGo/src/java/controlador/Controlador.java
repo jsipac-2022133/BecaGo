@@ -39,6 +39,7 @@ public class Controlador extends HttpServlet {
     EstudianteDAO estudianteDAO = new EstudianteDAO();
     Actividad actividad = new Actividad();
     ActividadDAO actividadDAO = new ActividadDAO();
+    int idActividad;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -149,10 +150,16 @@ public class Controlador extends HttpServlet {
                     actividad.setIdAdmin(idAdmin);
 
                     actividadDAO.Agregar(actividad);
+                
+                }if(accion.equals("Editar")){
+                    idActividad=Integer.parseInt(request.getParameter("idActividad"));
+                    Actividad actividadEncontrada=actividadDAO.buscarActividad(idActividad);
+                    request.setAttribute("actividadEncontrada", actividadEncontrada);
                 }
                 
             }
             
+            //no agregué un if de listar porque acá se ejecuta luego de cualquier acción crud
             List<Actividad> listaActividad = actividadDAO.listar();
             request.setAttribute("actividades", listaActividad);
 
