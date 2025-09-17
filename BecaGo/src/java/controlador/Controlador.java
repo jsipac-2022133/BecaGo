@@ -151,13 +151,13 @@ public class Controlador extends HttpServlet {
 
                     actividadDAO.agregar(actividad);
                 
-                }if(accion.equals("Editar")){
+                }else if(accion.equals("Editar")){
                     idActividad=Integer.parseInt(request.getParameter("idActividad"));
                     Actividad actividadEncontrada=actividadDAO.buscarActividad(idActividad);
                     request.setAttribute("actividadEncontrada", actividadEncontrada);
                     System.out.println(idActividad);
                 
-                }if(accion.equals("Actualizar")){
+                }else if(accion.equals("Actualizar")){
                     String nombreActividad = request.getParameter("txtNombreActividad");
                     String descripcion = request.getParameter("txtDescripcion");
                     String fechaString = request.getParameter("txtFechaActividad");
@@ -178,6 +178,10 @@ public class Controlador extends HttpServlet {
                     actividad.setIdAdmin(idAdmin);
                     actividad.setIdActividad(idActividad);
                     actividadDAO.actualizar(actividad);
+                
+                }else if(accion.equals("Eliminar")){
+                    idActividad=Integer.parseInt(request.getParameter("idActividad"));
+                    actividadDAO.eliminar(idActividad);
                 }
                 
             }

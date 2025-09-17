@@ -66,7 +66,7 @@
                         <td>${actividad.getIdAdmin()}</td>                        
                         <td>
                             <a href="Controlador?menu=Actividad&accion=Editar&idActividad=${actividad.getIdActividad()}">Editar</a>
-                            <a>Eliminar</a>
+                            <a href="Controlador?menu=Actividad&accion=Eliminar&idActividad=${actividad.getIdActividad()}">Eliminar</a>
                         </td>
                     </tr>
                 </c:forEach>
