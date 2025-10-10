@@ -1,37 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package modelo;
+
+import java.io.Serializable;
 import java.sql.Timestamp;
-/**
- *
- * @author SIPAC
- */
-public class Actividad {
-    
+
+public class Actividad implements Serializable {
     private int idActividad;
     private String nombreActividad;
-    private String descripcion;    
+    private String descripcion;
     private Timestamp fechaActividad;
     private String ubicacion;
     private double horasDadas;
     private int cuposDisponibles;
     private int idAdmin;
+    private byte[] imagen;
 
     public Actividad() {
-    }
-
-    public Actividad(int idActividad, String nombreActividad, String descripcion, Timestamp fechaActividad, String ubicacion, double horasDadas, int cuposDisponibles, int idAdmin) {
-        this.idActividad = idActividad;
-        this.nombreActividad = nombreActividad;
-        this.descripcion = descripcion;
-        this.fechaActividad = fechaActividad;
-        this.ubicacion = ubicacion;
-        this.horasDadas = horasDadas;
-        this.cuposDisponibles = cuposDisponibles;
-        this.idAdmin = idAdmin;
     }
 
     public int getIdActividad() {
@@ -97,6 +80,12 @@ public class Actividad {
     public void setIdAdmin(int idAdmin) {
         this.idAdmin = idAdmin;
     }
-    
-    
+
+    public byte[] getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
+    }
 }

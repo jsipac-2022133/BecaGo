@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package modeloDAO;
 
 import config.Conexion;
@@ -13,10 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import modelo.Actividad;
 
-/**
- *
- * @author SIPAC
- */
 public class ActividadDAO {
 
     Conexion cn = new Conexion();
@@ -25,10 +16,9 @@ public class ActividadDAO {
     ResultSet rs;
     int resp;
 
-    public int agregar(Actividad actividad) {
-        String sql = "insert into Actividad(nombreActividad, descripcion, "
-                + "fechaActividad, ubicacion, horasDadas, cuposDisponibles, idAdmin) values(?,?,?,?,?,?,?)";
-
+    public boolean agregar(Actividad actividad) {
+        System.out.println("DEBUG: Intentando agregar actividad - " + actividad.getNombreActividad());
+        String sql = "INSERT INTO Actividad(nombreActividad, descripcion, fechaActividad, ubicacion, horasDadas, cuposDisponibles, idAdmin, imagen) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             con = cn.Conexion();
             ps = con.prepareStatement(sql);
@@ -39,17 +29,30 @@ public class ActividadDAO {
             ps.setDouble(5, actividad.getHorasDadas());
             ps.setInt(6, actividad.getCuposDisponibles());
             ps.setInt(7, actividad.getIdAdmin());
-            resp = ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return resp;
-    }
 
+            System.out.println("DEBUG: Imagen es null: " + (actividad.getImagen() == null));
+
+            if (actividad.getImagen() != null) {
+                ps.setBytes(8, actividad.getImagen());
+                System.out.println("DEBUG: Imagen tamaño: " + actividad.getImagen().length + " bytes");
+            } else {
+                ps.setNull(8, java.sql.Types.BLOB);
+                System.out.println("DEBUG: Imagen es NULL en BD");
+            }
+
+            int resultado = ps.executeUpdate();
+            System.out.println("DEBUG: Filas afectadas: " + resultado);
+            return resultado > 0;
+        } catch (Exception e) {
+            System.out.println("DEBUG: Error en agregar: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
     
     public List<Actividad> listar() {
-        String sql = "select idActividad, nombreActividad, descripcion, fechaActividad, "
-                + "ubicacion, horasDadas, cuposDisponibles, idAdmin from Actividad";        
+        String sql = "SELECT idActividad, nombreActividad, descripcion, fechaActividad, "
+                + "ubicacion, horasDadas, cuposDisponibles, idAdmin, imagen FROM Actividad";        
         
         List<Actividad> listaActividad = new ArrayList<>();
         try {
@@ -67,8 +70,8 @@ public class ActividadDAO {
                 actividad.setHorasDadas(rs.getDouble("horasDadas"));
                 actividad.setCuposDisponibles(rs.getInt("cuposDisponibles"));
                 actividad.setIdAdmin(rs.getInt("idAdmin"));
+                actividad.setImagen(rs.getBytes("imagen"));
                 listaActividad.add(actividad);
-
             }
 
         } catch (Exception e) {
@@ -78,13 +81,14 @@ public class ActividadDAO {
     }
     
     public Actividad buscarActividad(int id){
-        Actividad actividad=new Actividad();
-        String sql = "select idActividad, nombreActividad, descripcion, fechaActividad, "
-                + "ubicacion, horasDadas, cuposDisponibles, idAdmin from Actividad where idActividad="+id;       
+        Actividad actividad = new Actividad();
+        String sql = "SELECT idActividad, nombreActividad, descripcion, fechaActividad, "
+                + "ubicacion, horasDadas, cuposDisponibles, idAdmin, imagen FROM Actividad WHERE idActividad = ?";       
         try {
-            con=cn.Conexion();
-            ps=con.prepareStatement(sql);
-            rs=ps.executeQuery();
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
             while(rs.next()){
                 actividad.setIdActividad(rs.getInt("idActividad"));
                 actividad.setNombreActividad(rs.getString("nombreActividad"));
@@ -94,6 +98,7 @@ public class ActividadDAO {
                 actividad.setHorasDadas(rs.getDouble("horasDadas"));
                 actividad.setCuposDisponibles(rs.getInt("cuposDisponibles"));
                 actividad.setIdAdmin(rs.getInt("idAdmin"));
+                actividad.setImagen(rs.getBytes("imagen"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,12 +107,12 @@ public class ActividadDAO {
     }
 
     public int actualizar(Actividad actividad){
-        String sql="Update Actividad set nombreActividad=?, descripcion=?, fechaActividad=?, ubicacion=?, "
-                + "horasDadas=?, cuposDisponibles=?, idAdmin=? where idActividad=?";
+        String sql = "UPDATE Actividad SET nombreActividad=?, descripcion=?, fechaActividad=?, ubicacion=?, "
+                + "horasDadas=?, cuposDisponibles=?, idAdmin=?, imagen=? WHERE idActividad=?";
         
         try {
-            con=cn.Conexion();
-            ps=con.prepareStatement(sql);
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
             ps.setString(1, actividad.getNombreActividad());
             ps.setString(2, actividad.getDescripcion());
             ps.setTimestamp(3, actividad.getFechaActividad());
@@ -115,8 +120,15 @@ public class ActividadDAO {
             ps.setDouble(5, actividad.getHorasDadas());
             ps.setInt(6, actividad.getCuposDisponibles());
             ps.setInt(7, actividad.getIdAdmin());
-            ps.setInt(8, actividad.getIdActividad());
-            resp=ps.executeUpdate();
+            
+            if (actividad.getImagen() != null) {
+                ps.setBytes(8, actividad.getImagen());
+            } else {
+                ps.setNull(8, java.sql.Types.BLOB);
+            }
+            
+            ps.setInt(9, actividad.getIdActividad());
+            resp = ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -124,14 +136,14 @@ public class ActividadDAO {
     }
     
     public void eliminar(int id){
-        String sql="delete from Actividad where idActividad="+id;
+        String sql = "DELETE FROM Actividad WHERE idActividad = ?";
         try {
-            con=cn.Conexion();
-            ps=con.prepareStatement(sql);
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
 }

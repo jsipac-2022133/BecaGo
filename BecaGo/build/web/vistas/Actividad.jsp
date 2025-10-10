@@ -14,32 +14,53 @@
     </head>
     <body>
         <h1><a>Agregar Actividad</a></h1>
-        <form action="Controlador?menu=Actividad" method="POST">
+        
+        <form action="Controlador?menu=Actividad" method="POST" enctype="multipart/form-data">
             <label>Nombre actividad</label>
-            <input value="${actividadEncontrada.getNombreActividad()}" type="text" name="txtNombreActividad" placeholder="Nombre Actividad">
+            <input value="${actividadEncontrada.getNombreActividad()}" 
+                   type="text" name="txtNombreActividad" placeholder="Nombre Actividad">
             <br>
             <label>Descripción</label>
-            <input value="${actividadEncontrada.getDescripcion()}" name="txtDescripcion" type="text" placeholder="Escribe la descripción de la actividad">            
+            <input value="${actividadEncontrada.getDescripcion()}" 
+                   name="txtDescripcion" type="text" placeholder="Escribe la descripción de la actividad">            
             <br>
             <label>Fecha</label>
-            <input value="${actividadEncontrada.getFechaActividad()}" type="datetime-local" name="txtFechaActividad">
+            <input value="${actividadEncontrada.getFechaActividad()}" 
+                   type="datetime-local" name="txtFechaActividad">
             <br>
             <label>Ubicación</label>
-            <input value="${actividadEncontrada.getUbicacion()}" type="text" name="txtUbicacion" placeholder="Ubicación de encuentro">
+            <input value="${actividadEncontrada.getUbicacion()}" 
+                   type="text" name="txtUbicacion" placeholder="Ubicación de encuentro">
             <br>
             <label>Horas dadas</label>
-            <input value="${actividadEncontrada.getHorasDadas()}" type="number" name="txtHorasDadas" placeholder="Horas dadas al finalizar actividad" step="0.01">
+            <input value="${actividadEncontrada.getHorasDadas()}" 
+                   type="number" name="txtHorasDadas" placeholder="Horas dadas al finalizar actividad" step="0.01">
             <br>
             <label>Cupos disponibles</label>
-            <input value="${actividadEncontrada.getCuposDisponibles()}" type="number" name="txtCuposDisponibles" placeholder="Cupos disponibles">
+            <input value="${actividadEncontrada.getCuposDisponibles()}" 
+                   type="number" name="txtCuposDisponibles" placeholder="Cupos disponibles">
             <br>
-            <button type="submit" name="accion" value="Agregar">Agregar</button>
-            <button type="submit" name="accion" value="Actualizar">Actualizar</button>
+            <label>Imagen</label>
+            <input type="file" name="txtImagen" accept="image/*">
+            <br>
+
+            <c:choose>
+                <c:when test="${actividadEncontrada != null}">
+                    <input type="hidden" name="idActividad" value="${actividadEncontrada.getIdActividad()}">
+                    <button type="submit" name="accion" value="Actualizar">Actualizar</button>
+                    <a href="Controlador?menu=Actividad">Cancelar</a>
+                </c:when>
+                <c:otherwise>
+                    <button type="submit" name="accion" value="Agregar">Agregar</button>
+                </c:otherwise>
+            </c:choose>
         </form>
+
         <br>
         <br>
         <br>
-        <table>
+        
+        <table border="1">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -51,6 +72,7 @@
                     <th>Cupos Disponibles</th>
                     <th>Id Admin</th>
                     <th>Acciones</th>
+                    <th>Imagen</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,9 +90,14 @@
                             <a href="Controlador?menu=Actividad&accion=Editar&idActividad=${actividad.getIdActividad()}">Editar</a>
                             <a href="Controlador?menu=Actividad&accion=Eliminar&idActividad=${actividad.getIdActividad()}">Eliminar</a>
                         </td>
+                        <td>
+                            <c:if test="${actividad.getImagen() != null}">
+                                <img src="Controlador?menu=Actividad&accion=VerImagen&idActividad=${actividad.getIdActividad()}" 
+                                     width="50" height="50" alt="Imagen actividad">
+                            </c:if>
+                        </td>
                     </tr>
                 </c:forEach>
-
             </tbody>
         </table>
     </body>
