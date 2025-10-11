@@ -22,7 +22,7 @@ import modeloDAO.AdministradorDAO;
 import modeloDAO.EstudianteDAO;
 
 @WebServlet(name = "Controlador", urlPatterns = {"/Controlador"})
-@MultipartConfig(maxFileSize = 16177215) 
+@MultipartConfig(maxFileSize = 16177215)
 public class Controlador extends HttpServlet {
 
     Administrador administrador = new Administrador();
@@ -92,7 +92,7 @@ public class Controlador extends HttpServlet {
                 if (correo.matches(".*\\d.*")) {
                     estudiante = estudianteDAO.validar(correo, password);
                     if (estudiante.getCorreoEstudiante() != null) {
-                        request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
+                        response.sendRedirect("Controlador?menu=Actividades%20Estudiante&accion=Listar");                        
                     } else {
                         request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
                     }
@@ -128,15 +128,15 @@ public class Controlador extends HttpServlet {
                     byte[] imagen = null;
                     if (filePart != null && filePart.getSize() > 0) {
                         try (InputStream inputStream = filePart.getInputStream();
-                             ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-        
+                                ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+
                             byte[] data = new byte[1024];
                             int bytesRead;
                             while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
                                 buffer.write(data, 0, bytesRead);
                             }
                             imagen = buffer.toByteArray();
-        
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -179,19 +179,19 @@ public class Controlador extends HttpServlet {
                     int cuposDisponibles = Integer.parseInt(request.getParameter("txtCuposDisponibles"));
                     int idAdmin = adminEnSesion.getIdAdmin();
 
-                    Part filePart = request.getPart("txtImagen"); 
-                    byte[] imagen = null; 
-                    if (filePart != null && filePart.getSize() > 0) { 
+                    Part filePart = request.getPart("txtImagen");
+                    byte[] imagen = null;
+                    if (filePart != null && filePart.getSize() > 0) {
                         try (InputStream inputStream = filePart.getInputStream();
-                             ByteArrayOutputStream buffer = new ByteArrayOutputStream()) { 
-        
+                                ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+
                             byte[] data = new byte[1024];
                             int bytesRead;
                             while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
                                 buffer.write(data, 0, bytesRead);
                             }
                             imagen = buffer.toByteArray();
-        
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -231,13 +231,21 @@ public class Controlador extends HttpServlet {
                         response.setContentType("image/jpeg");
                         response.getOutputStream().write(imgData);
                     }
-                    return; 
+                    return;
                 }
             }
 
             List<Actividad> listaActividad = actividadDAO.listar();
             request.setAttribute("actividades", listaActividad);
             request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
+        } else if (menu.equals("Actividades Estudiante")) {
+            if (accion.equals("Listar")) {
+                List<Actividad> listaActividad = actividadDAO.listar();
+                request.setAttribute("actividades", listaActividad);
+                request.getRequestDispatcher("vistas/ActividadEstudiante.jsp").forward(request, response);
+            }
+        }else if(menu.equals("Home")){
+            request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
         }
     }
 
