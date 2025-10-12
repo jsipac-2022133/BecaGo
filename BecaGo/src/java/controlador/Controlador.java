@@ -246,6 +246,13 @@ public class Controlador extends HttpServlet {
             }
         }else if(menu.equals("Home")){
             request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
+        }else if(menu.equals("InformacionActividad")){
+            if(accion.equals("Info Individual")){
+                idActividad=Integer.parseInt(request.getParameter("idActividad"));
+                Actividad actividad=actividadDAO.buscarActividad(idActividad);
+                request.setAttribute("actividadIndividual", actividad);
+                request.getRequestDispatcher("vistas/InformacionActividad.jsp").forward(request, response);
+            }
         }
     }
 

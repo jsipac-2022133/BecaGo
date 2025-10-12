@@ -21,19 +21,22 @@
                 <li><a href="#">Resumen</a></li>
                 <li><a href="#">Logout</a></li>
             </ul>
-            
-            <div>
-                <c:forEach var="actividad" items="${actividades}">
+        </nav>
+        
+        <div>
+            <c:forEach var="actividad" items="${actividades}">
+                <a href="Controlador?menu=InformacionActividad&accion=Info%20Individual&idActividad=${actividad.getIdActividad()}">
                     <div style="border: 1px solid #333;">
                         <h2>📌 ${actividad.getNombreActividad()}</h2>
                         <h3>${actividad.getFechaActividad()}</h3>
                         <c:if test="${actividad.getImagen() != null}">
-                                <img src="Controlador?menu=Actividad&accion=VerImagen&idActividad=${actividad.getIdActividad()}" 
-                                     width="50" height="50" alt="Imagen actividad">
-                            </c:if>
+                            <img src="Controlador?menu=Actividad&accion=VerImagen&idActividad=${actividad.getIdActividad()}" 
+                                 width="50" height="50" alt="Imagen actividad">
+                        </c:if>
                     </div>
-                </c:forEach>
-            </div>
-        </nav>
+                </a>
+            </c:forEach>
+        </div>
+
     </body>
 </html>
