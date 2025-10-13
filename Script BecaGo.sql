@@ -32,7 +32,7 @@ create table Estudiante(
 );
 
 create table Actividad(
-	idActividad int not null auto_increment,
+    idActividad int not null auto_increment,
     nombreActividad varchar(100) not null,
     descripcion text not null,
     fechaActividad datetime not null,
@@ -40,9 +40,11 @@ create table Actividad(
     horasDadas decimal(5,1) not null,
     cuposDisponibles int not null,
     idAdmin int not null,
+    imagen LONGBLOB not null,
     primary key PK_idActividad(idActividad),
     constraint FK_Actividad_Admin foreign key(idAdmin)
 		references Administrador(idAdmin) on delete cascade
+	
 );
 
 create table Inscripcion(
@@ -78,6 +80,9 @@ select * from Estudiante;
 delete from Estudiante where idEstudiante=1;
 
 select * from Actividad;
+
+
+SELECT * FROM Actividad;
 
 
 

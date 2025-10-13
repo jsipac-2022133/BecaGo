@@ -1,23 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controlador;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import javax.servlet.annotation.MultipartConfig;
 import modelo.Actividad;
 import modelo.Administrador;
 import modelo.Estudiante;
@@ -25,12 +21,8 @@ import modeloDAO.ActividadDAO;
 import modeloDAO.AdministradorDAO;
 import modeloDAO.EstudianteDAO;
 
-/**
- *
- * @author SIPAC
- */
-@WebServlet(name = "Controlador", urlPatterns = ("/Controlador"))
-@MultipartConfig
+@WebServlet(name = "Controlador", urlPatterns = {"/Controlador"})
+@MultipartConfig(maxFileSize = 16177215)
 public class Controlador extends HttpServlet {
 
     Administrador administrador = new Administrador();
@@ -41,28 +33,20 @@ public class Controlador extends HttpServlet {
     ActividadDAO actividadDAO = new ActividadDAO();
     int idActividad;
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String menu = request.getParameter("menu");
         String accion = request.getParameter("accion");
 
-        //Apartado para obtener la sesión del usuario, no tocar xd
         HttpSession sessionActiva = request.getSession(false);
         Administrador adminEnSesion = (Administrador) sessionActiva.getAttribute("administradorEnSesion");
 
         if (menu == null || menu.equals("Login")) {
             request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
+
         } else if (menu.equals("Register")) {
             request.getRequestDispatcher("vistas/Register.jsp").forward(request, response);
+
         } else if (menu.equals("Admin-Estudiante")) {
             if (accion.equals("Agregar Admin")) {
                 String nombreAdmin = request.getParameter("txtNombre");
@@ -100,6 +84,7 @@ public class Controlador extends HttpServlet {
                 estudianteDAO.Agregar(estudiante);
                 request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
             }
+
         } else if (menu.equals("Validar")) {
             if (accion.equals("Login")) {
                 String correo = request.getParameter("txtCorreo");
@@ -107,7 +92,7 @@ public class Controlador extends HttpServlet {
                 if (correo.matches(".*\\d.*")) {
                     estudiante = estudianteDAO.validar(correo, password);
                     if (estudiante.getCorreoEstudiante() != null) {
-                        request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
+                        response.sendRedirect("Controlador?menu=Actividades%20Estudiante&accion=Listar");                        
                     } else {
                         request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
                     }
@@ -116,17 +101,15 @@ public class Controlador extends HttpServlet {
                     if (administrador.getCorreoAdmin() != null) {
                         HttpSession session = request.getSession();
                         session.setAttribute("administradorEnSesion", administrador);
-                        ///////////////////////////
-                        //Este apartado es para que liste Actividad luego del login
                         List<Actividad> listaActividad = actividadDAO.listar();
                         request.setAttribute("actividades", listaActividad);
-                        //////////////////////////
                         request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
                     } else {
                         request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
                     }
                 }
             }
+
         } else if (menu.equals("Actividad")) {
 
             if (accion != null) {
@@ -141,6 +124,24 @@ public class Controlador extends HttpServlet {
                     int cuposDisponibles = Integer.parseInt(request.getParameter("txtCuposDisponibles"));
                     int idAdmin = adminEnSesion.getIdAdmin();
 
+                    Part filePart = request.getPart("txtImagen");
+                    byte[] imagen = null;
+                    if (filePart != null && filePart.getSize() > 0) {
+                        try (InputStream inputStream = filePart.getInputStream();
+                                ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+
+                            byte[] data = new byte[1024];
+                            int bytesRead;
+                            while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
+                                buffer.write(data, 0, bytesRead);
+                            }
+                            imagen = buffer.toByteArray();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     actividad.setNombreActividad(nombreActividad);
                     actividad.setDescripcion(descripcion);
                     actividad.setFechaActividad(fechaActividad);
@@ -148,16 +149,26 @@ public class Controlador extends HttpServlet {
                     actividad.setHorasDadas(horasDadas);
                     actividad.setCuposDisponibles(cuposDisponibles);
                     actividad.setIdAdmin(idAdmin);
+                    actividad.setImagen(imagen);
 
                     actividadDAO.agregar(actividad);
-                
-                }else if(accion.equals("Editar")){
-                    idActividad=Integer.parseInt(request.getParameter("idActividad"));
-                    Actividad actividadEncontrada=actividadDAO.buscarActividad(idActividad);
+
+                    List<Actividad> listaActividad = actividadDAO.listar();
+                    request.setAttribute("actividades", listaActividad);
+                    request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
+                    return;
+
+                } else if (accion.equals("Editar")) {
+                    idActividad = Integer.parseInt(request.getParameter("idActividad"));
+                    Actividad actividadEncontrada = actividadDAO.buscarActividad(idActividad);
                     request.setAttribute("actividadEncontrada", actividadEncontrada);
-                    System.out.println(idActividad);
-                
-                }else if(accion.equals("Actualizar")){
+
+                    List<Actividad> listaActividad = actividadDAO.listar();
+                    request.setAttribute("actividades", listaActividad);
+                    request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
+                    return;
+
+                } else if (accion.equals("Actualizar")) {
                     String nombreActividad = request.getParameter("txtNombreActividad");
                     String descripcion = request.getParameter("txtDescripcion");
                     String fechaString = request.getParameter("txtFechaActividad");
@@ -167,8 +178,25 @@ public class Controlador extends HttpServlet {
                     double horasDadas = Double.parseDouble(request.getParameter("txtHorasDadas"));
                     int cuposDisponibles = Integer.parseInt(request.getParameter("txtCuposDisponibles"));
                     int idAdmin = adminEnSesion.getIdAdmin();
-                    System.out.println(idActividad);
-                    
+
+                    Part filePart = request.getPart("txtImagen");
+                    byte[] imagen = null;
+                    if (filePart != null && filePart.getSize() > 0) {
+                        try (InputStream inputStream = filePart.getInputStream();
+                                ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+
+                            byte[] data = new byte[1024];
+                            int bytesRead;
+                            while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
+                                buffer.write(data, 0, bytesRead);
+                            }
+                            imagen = buffer.toByteArray();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     actividad.setNombreActividad(nombreActividad);
                     actividad.setDescripcion(descripcion);
                     actividad.setFechaActividad(fechaActividad);
@@ -177,61 +205,66 @@ public class Controlador extends HttpServlet {
                     actividad.setCuposDisponibles(cuposDisponibles);
                     actividad.setIdAdmin(idAdmin);
                     actividad.setIdActividad(idActividad);
+                    actividad.setImagen(imagen);
+
                     actividadDAO.actualizar(actividad);
-                
-                }else if(accion.equals("Eliminar")){
-                    idActividad=Integer.parseInt(request.getParameter("idActividad"));
+
+                    List<Actividad> listaActividad = actividadDAO.listar();
+                    request.setAttribute("actividades", listaActividad);
+                    request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
+                    return;
+
+                } else if (accion.equals("Eliminar")) {
+                    idActividad = Integer.parseInt(request.getParameter("idActividad"));
                     actividadDAO.eliminar(idActividad);
+
+                    List<Actividad> listaActividad = actividadDAO.listar();
+                    request.setAttribute("actividades", listaActividad);
+                    request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
+                    return;
+
+                } else if (accion.equals("VerImagen")) {
+                    int id = Integer.parseInt(request.getParameter("idActividad"));
+                    Actividad act = actividadDAO.buscarActividad(id);
+                    byte[] imgData = act.getImagen();
+                    if (imgData != null) {
+                        response.setContentType("image/jpeg");
+                        response.getOutputStream().write(imgData);
+                    }
+                    return;
                 }
-                
             }
-            
-            //no agregué un if de listar porque acá se ejecuta luego de cualquier acción crud
+
             List<Actividad> listaActividad = actividadDAO.listar();
             request.setAttribute("actividades", listaActividad);
-
             request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
+        } else if (menu.equals("Actividades Estudiante")) {
+            if (accion.equals("Listar")) {
+                List<Actividad> listaActividad = actividadDAO.listar();
+                request.setAttribute("actividades", listaActividad);
+                request.getRequestDispatcher("vistas/ActividadEstudiante.jsp").forward(request, response);
+            }
+        }else if(menu.equals("Home")){
+            request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
+        }else if(menu.equals("InformacionActividad")){
+            if(accion.equals("Info Individual")){
+                idActividad=Integer.parseInt(request.getParameter("idActividad"));
+                Actividad actividad=actividadDAO.buscarActividad(idActividad);
+                request.setAttribute("actividadIndividual", actividad);
+                request.getRequestDispatcher("vistas/InformacionActividad.jsp").forward(request, response);
+            }
         }
-
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }
