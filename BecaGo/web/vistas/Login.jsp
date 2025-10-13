@@ -19,7 +19,17 @@
             <br>
             <label>Password</label>
             <input type="password" name="txtPassword" placeholder="Password">
-            <br><br>
+            <br>
+            
+            <% 
+            String error = (String) request.getAttribute("error");
+            if (error != null) {
+            %>
+                <div style="color: red; padding: 10px;">
+                    <%= error %>
+                </div>
+            <% } %>
+            
             <button type="submit" name="accion" value="Login">Login</button>
             <br>
             <p>¿No tienes cuenta? <a href="Controlador?menu=Register">Registrarse</a></p>

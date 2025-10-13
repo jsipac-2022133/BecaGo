@@ -69,33 +69,45 @@
             // Mantiene la validación de Administrador / Alumno basado en si tiene o no números
             function validarCorreo() {
                 const correo = document.getElementById("correo");
-                const correoCompleto = document.getElementById("correoCompleto");
                 const deptoField = document.getElementById("unidadDepto");
                 const estudiante = document.getElementById("estudiante");
                 const errorCorreo = document.getElementById("errorCorreo");
                 
-                // Valida que no esté vacío y no tenga espacios
-                if (correo.value && /\s/.test(correo.value)) {
-                    errorCorreo.style.display = "block";
-                    correo.style.borderColor = "red";
-                    return;
+                if (correo.value) {
+                    // Valida que no tenga espacios
+                    if (/\s/.test(correo.value)) {
+                        errorCorreo.textContent = "No se permiten espacios en el correo";
+                        errorCorreo.style.display = "block";
+                        correo.style.borderColor = "red";
+                        return;
+                    }
+        
+                    // Valida que termine con @uvg.edu.gt
+                    if (!correo.value.endsWith("@uvg.edu.gt")) {
+                        errorCorreo.textContent = "El correo debe terminar con @uvg.edu.gt";
+                        errorCorreo.style.display = "block";
+                        correo.style.borderColor = "red";
+                        return;
+                    }
+        
+                    // Si pasa las validaciones
+                    errorCorreo.style.display = "none";
+                    correo.style.borderColor = "";
+        
+                    // Extraer la parte antes del @ para verificar si tiene números
+                    const correoInicio = correo.value.split("@")[0];
+                    const tieneNumeros = /\d/.test(correoInicio);
+        
+                    if (!tieneNumeros) {
+                        deptoField.style.display = "block";
+                        estudiante.style.display = "none";
+                    } else {
+                        deptoField.style.display = "none";
+                        estudiante.style.display = "block";
+                    }
                 } else {
                     errorCorreo.style.display = "none";
                     correo.style.borderColor = "";
-                }
-                
-                // Actualizar el correo completo
-                correoCompleto.value = correo.value + "@uvg.edu.gt";
-                
-                // Verifica si tiene números o no
-                const tieneNumeros = /\d/.test(correo.value);
-                if (!tieneNumeros && correo.value) {
-                    deptoField.style.display = "block";
-                    estudiante.style.display = "none";
-                } else if (tieneNumeros) {
-                    deptoField.style.display = "none";
-                    estudiante.style.display = "block";
-                } else {
                     deptoField.style.display = "none";
                     estudiante.style.display = "none";
                 }
@@ -149,15 +161,21 @@
             }
             
             // Capitaliza la primera letra de cada palabra (Para nombres y apellidos)
-            function capPrimeraLetra(campoId) {
+            function capPrimerasLetras(campoId) {
                 const campo = document.getElementById(campoId);
     
+                // Capitaliza la primera letra de cada palabra y después de guiones
                 campo.value = campo.value
                     .toLowerCase()
-                    .split(' ')
-                    .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1))
-                    .join(' ');
-            }
+                    .split(/(\s|-)/g)  // Divide por espacios y guiones, pero mantiene los separadores
+                    .map(parte => {
+                        if (parte === ' ' || parte === '-') {
+                            return parte;  // Mantiene espacios y guiones como están
+                        }
+                        return parte.charAt(0).toUpperCase() + parte.slice(1);
+                    })
+                    .join('');
+}
             
             function mostrarCarreras() {
                 const facultad = document.getElementById("facultad").value;
@@ -171,39 +189,65 @@
                 const carreras = {
                     "Ingeniería": [
                         "Biomédica",
-                        "Electrónica",
+                        "Biotecnología Industrial",
+                        "Ciencia de la Administración",
+                        "Ciencias de Alimentos",
+                        "Ciencias de Alimentos Industrial",
                         "Civil",
                         "Civil Arquitectónica",
+                        "Ciencia de la Computación y Tecnologías de la Información",
+                        "Sistemas de Información Computacional",
+                        "Electrónica",
                         "Industrial",
                         "Mecánica",
+                        "Mecánica Industrial",
+                        "Mecatrónica",
                         "Química",
+                        "Química Industrial"
+                    ],
+                    "Bridge Business School": [
+                        "Ingeniería en Ciencia de la Administración",
+                        "Administración de Empresas",
+                        "International Marketing and Business Analytics",
+                        "Comunicación Estratégica"
                     ],
                     "Educación": [
-                        "Profesorado en Educación Inclusiva"
+                        "Profesorado de Enseñanza Media especializado en Educación Musical",
+                        "Profesorado de Enseñanza Media especializado en English Language Teaching (ELT)",
+                        "Profesorado Especializado en Educación Inclusiva",
+                        "Profesorado Especializado en Educación Primaria (100% virtual)",
+                        "Profesorado Especializado en Problemas del Aprendizaje",
+                        "Profesorado de Enseñanza Media Especializado en Matemática y Ciencias Físicas",
+                        "Profesorado de Enseñanza Media Especializado en Ciencias Químicas y Biológicas",
+                        "Profesorado de Enseñanza Media Especializado en Ciencias Sociales",
+                        "Profesorado de Enseñanza Media Especializado en Comunicación y Lenguaje"
+                    ],
+                    "Colegio Universitario": [
+                        "Baccalaureatus en Artibus",
+                        "Baccalaureatus en Scientiis"
+                    ],
+                    "Escuela de Arquitectura": [
+                        "Arquitectura"
                     ],
                     "Ciencias y Humanidades": [
                         "Biología",
                         "Bioquímica y Microbiología",
+                        "Biotecnología Molecular",
                         "Física",
-                        "Nutrición"
+                        "Matemática Aplicada",
+                        "Nutrición",
+                        "Química",
+                        "Química Farmacéutica"
                     ],
                     "Ciencias Sociales": [
                         "Antropología",
-                        "Arqueología"
-                    ],
-                    "Bridge Business School": [
-                        "Administración de Empresas",
+                        "Arqueología",
+                        "Psicología",
+                        "Relaciones Internacionales"
                     ],
                     "Design Innovation & Arts School": [
                         "Composición y Producción Musical",
                         "Diseño de Producto e Innovación"
-                    ],
-                    "Colegio Universitario": [
-                        "Baccalaureatus en Artibus",
-                        "Baccalaureatus en Scientiis¨"
-                    ],
-                    "Escuela de Arquitectura": [
-                        "Arquitectura"
                     ]
                 };
     
@@ -323,32 +367,46 @@
             
         </script>
     </head>
+    
+    <%@ page import="java.util.ArrayList" %>
+    
     <body>
         
         <a href="Controlador?menu=Login" >← Volver al Iniciar Sesión</a>
         
         <h1>Registrarse</h1>
+        
+        <% 
+        ArrayList<String> errores = (ArrayList<String>) request.getAttribute("errores");
+        if (errores != null && !errores.isEmpty()) {
+        %>
+            <div style="color: red; padding: 10px;">
+                <% for (String error : errores) { %>
+                    <%= error %><br>
+                <% } %>
+            </div>
+        <% } %>
+        
         <form action="Controlador?menu=Admin-Estudiante" method="POST" onsubmit="return validarForm()">
             
             <label>Nombre</label>
-            <input type="text" id="nombre" name="txtNombre" placeholder="Nombre" onblur="validarNombreApellido('nombre', 'errorNombre')"><br>
+            <input type="text" id="nombre" name="txtNombre" placeholder="" onblur="validarNombreApellido('nombre', 'errorNombre')"><br>
             <span id="errorNombre" style="display:none; color:red;">Sólo se permiten letras y guiones</span><br>
 
             <label>Apellido</label>
-            <input type="text" id="apellido" name="txtApellido" placeholder="Apellido" onblur="validarNombreApellido('apellido', 'errorApellido')"><br>
+            <input type="text" id="apellido" name="txtApellido" placeholder="" onblur="validarNombreApellido('apellido', 'errorApellido')"><br>
             <span id="errorApellido" style="display:none; color:red;">Sólo se permiten letras y guiones</span><br>
             
             <label>Teléfono</label>
-            <input type="text" id="telefono" name="txtTelefono" placeholder="Teléfono" onblur="validarTel()"><br>
+            +502 <input type="text" id="telefono" name="txtTelefono" placeholder="" onblur="validarTel()"><br>
             <span id="errorTelefono" style="display:none; color:red;"></span><br>
             
             <label>Correo</label>
-            <input type="text" id="correo" name="txtCorreoPrincipio" placeholder="Correo Electrónico" onkeyup="validarCorreo()" style="width: 200px;" style="margin: 5px;"> @uvg.edu.gt<br>
-            <input type="hidden" id="correoCompleto" name="txtCorreo">
-            <span id="errorCorreo" style="display:none; color:red;">No se permiten espacios en el correo</span><br>
+            <input type="email" id="correo" name="txtCorreo" placeholder="usuario@uvg.edu.gt" onblur="validarCorreo()" style="width: 300px;">
+            <span id="errorCorreo" style="display:none; color:red;"></span><br><br>
             
             <label>Contraseña</label>
-            <input type="password" id="password" name="txtPassword" placeholder="Password" onblur="validarPassword()"><br>
+            <input type="password" id="password" name="txtPassword" placeholder="" onblur="validarPassword()"><br>
             <span id="errorPassword" style="display:none; color:red;"></span><br>
             
             <div id="unidadDepto" style="display:none;">
@@ -368,7 +426,7 @@
                     <option value="Dirección General de Estudios">Dirección General de Estudios</option>
                     <option value="Decanos">Decanos</option>
                     <option value="Instituto de Investigaciones">Instituto de Investigaciones</option>
-                    <option value="Administrativosó">Administrativos</option>
+                    <option value="Administrativos">Administrativos</option>
                 </select><br>
                 <br>
                 

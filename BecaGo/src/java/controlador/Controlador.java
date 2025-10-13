@@ -54,8 +54,26 @@ public class Controlador extends HttpServlet {
                 String telefonoAdmin = request.getParameter("txtTelefono");
                 String correoAdmin = request.getParameter("txtCorreo");
                 String passwordAdmin = request.getParameter("txtPassword");
-                String departamentoAdmin = request.getParameter("txtDepartamento");
-
+                String departamentoAdmin = request.getParameter("txtUnidadDepto");
+                
+                java.util.ArrayList<String> errores = new java.util.ArrayList<>();
+                
+                // Verifica si el correo ya existe
+                if (administradorDAO.existeCorreo(correoAdmin) || estudianteDAO.existeCorreo(correoAdmin)) {
+                    errores.add("El correo ya está registrado");
+                }
+                // Verifica si el teléfono ya existe
+                if (administradorDAO.existeTel(telefonoAdmin) || estudianteDAO.existeTel(telefonoAdmin)) {
+                    errores.add("El teléfono ya está registrado");
+                }
+                
+                // Muestra si hay errores
+                if (!errores.isEmpty()) {
+                    request.setAttribute("errores", errores);
+                    request.getRequestDispatcher("vistas/Register.jsp").forward(request, response);
+                    return;
+                }
+                
                 administrador.setNombreAdmin(nombreAdmin);
                 administrador.setApellidoAdmin(apellidoAdmin);
                 administrador.setTelefono(telefonoAdmin);
@@ -73,7 +91,25 @@ public class Controlador extends HttpServlet {
                 String passwordEstudiante = request.getParameter("txtPassword");
                 String carreraEstudiante = request.getParameter("txtCarrera");
                 int horasAsignadas = Integer.parseInt(request.getParameter("txtHorasAsignadas"));
-
+                
+                java.util.ArrayList<String> errores = new java.util.ArrayList<>();
+                
+                // Verifica si el correo ya existe
+                if (estudianteDAO.existeCorreo(correoEstudiante) || administradorDAO.existeCorreo(correoEstudiante)) {
+                    errores.add("El correo ya está registrado");
+                }
+                // Verifica si el teléfono ya existe
+                if (estudianteDAO.existeTel(telefonoEstudiante) || administradorDAO.existeTel(telefonoEstudiante)) {
+                    errores.add("El teléfono ya está registrado");
+                }
+                
+                // Muestra si hay errores
+                if (!errores.isEmpty()) {
+                    request.setAttribute("errores", errores);
+                    request.getRequestDispatcher("vistas/Register.jsp").forward(request, response);
+                    return;
+                }
+                
                 estudiante.setNombreEstudiante(nombreEstudiante);
                 estudiante.setApellidoEstudiante(apellidoEstudiante);
                 estudiante.setTelefono(telefonoEstudiante);
@@ -89,22 +125,37 @@ public class Controlador extends HttpServlet {
             if (accion.equals("Login")) {
                 String correo = request.getParameter("txtCorreo");
                 String password = request.getParameter("txtPassword");
+                
                 if (correo.matches(".*\\d.*")) {
+                    // Es estudiante
                     estudiante = estudianteDAO.validar(correo, password);
                     if (estudiante.getCorreoEstudiante() != null) {
-                        response.sendRedirect("Controlador?menu=Actividades%20Estudiante&accion=Listar");                        
+                        // Login exitoso
+                        HttpSession session = request.getSession();
+                        session.setAttribute("estudianteEnSesion", estudiante);
+                        request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
                     } else {
-                        request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
+                        // Login fallido
+                        request.setAttribute("error", "Correo y/o contraseña incorrecto(s)");
+                request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
                     }
+                    
                 } else {
+                    // Es administrador
                     administrador = administradorDAO.validar(correo, password);
                     if (administrador.getCorreoAdmin() != null) {
+                        // Login exitoso
                         HttpSession session = request.getSession();
                         session.setAttribute("administradorEnSesion", administrador);
+                
+                        // Lista actividades
                         List<Actividad> listaActividad = actividadDAO.listar();
                         request.setAttribute("actividades", listaActividad);
+                
                         request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
                     } else {
+                        // Login fallido
+                        request.setAttribute("error", "Correo y/o contraseña incorrecto(s)");
                         request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
                     }
                 }
