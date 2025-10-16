@@ -9,9 +9,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Actividades</title>
-    </head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Actividades - BecaGo</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/estilo.css">
+</head>
     <body>
         <nav>
             <ul>
