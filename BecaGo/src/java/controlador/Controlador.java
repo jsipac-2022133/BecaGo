@@ -58,16 +58,13 @@ public class Controlador extends HttpServlet {
                 
                 java.util.ArrayList<String> errores = new java.util.ArrayList<>();
                 
-                // Verifica si el correo ya existe
                 if (administradorDAO.existeCorreo(correoAdmin) || estudianteDAO.existeCorreo(correoAdmin)) {
                     errores.add("El correo ya está registrado");
                 }
-                // Verifica si el teléfono ya existe
                 if (administradorDAO.existeTel(telefonoAdmin) || estudianteDAO.existeTel(telefonoAdmin)) {
                     errores.add("El teléfono ya está registrado");
                 }
                 
-                // Muestra si hay errores
                 if (!errores.isEmpty()) {
                     request.setAttribute("errores", errores);
                     request.getRequestDispatcher("vistas/Register.jsp").forward(request, response);
@@ -94,16 +91,13 @@ public class Controlador extends HttpServlet {
                 
                 java.util.ArrayList<String> errores = new java.util.ArrayList<>();
                 
-                // Verifica si el correo ya existe
                 if (estudianteDAO.existeCorreo(correoEstudiante) || administradorDAO.existeCorreo(correoEstudiante)) {
                     errores.add("El correo ya está registrado");
                 }
-                // Verifica si el teléfono ya existe
                 if (estudianteDAO.existeTel(telefonoEstudiante) || administradorDAO.existeTel(telefonoEstudiante)) {
                     errores.add("El teléfono ya está registrado");
                 }
                 
-                // Muestra si hay errores
                 if (!errores.isEmpty()) {
                     request.setAttribute("errores", errores);
                     request.getRequestDispatcher("vistas/Register.jsp").forward(request, response);
@@ -127,34 +121,27 @@ public class Controlador extends HttpServlet {
                 String password = request.getParameter("txtPassword");
                 
                 if (correo.matches(".*\\d.*")) {
-                    // Es estudiante
                     estudiante = estudianteDAO.validar(correo, password);
                     if (estudiante.getCorreoEstudiante() != null) {
-                        // Login exitoso
                         HttpSession session = request.getSession();
                         session.setAttribute("estudianteEnSesion", estudiante);
                         request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
                     } else {
-                        // Login fallido
                         request.setAttribute("error", "Correo y/o contraseña incorrecto(s)");
                 request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
                     }
                     
                 } else {
-                    // Es administrador
                     administrador = administradorDAO.validar(correo, password);
                     if (administrador.getCorreoAdmin() != null) {
-                        // Login exitoso
                         HttpSession session = request.getSession();
                         session.setAttribute("administradorEnSesion", administrador);
                 
-                        // Lista actividades
                         List<Actividad> listaActividad = actividadDAO.listar();
                         request.setAttribute("actividades", listaActividad);
                 
                         request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
                     } else {
-                        // Login fallido
                         request.setAttribute("error", "Correo y/o contraseña incorrecto(s)");
                         request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
                     }
@@ -220,6 +207,7 @@ public class Controlador extends HttpServlet {
                     return;
 
                 } else if (accion.equals("Actualizar")) {
+                    int idActividadActualizar = Integer.parseInt(request.getParameter("idActividad"));
                     String nombreActividad = request.getParameter("txtNombreActividad");
                     String descripcion = request.getParameter("txtDescripcion");
                     String fechaString = request.getParameter("txtFechaActividad");
@@ -246,8 +234,12 @@ public class Controlador extends HttpServlet {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                    } else {
+                        Actividad actividadExistente = actividadDAO.buscarActividad(idActividadActualizar);
+                        imagen = actividadExistente.getImagen();
                     }
 
+                    actividad.setIdActividad(idActividadActualizar);
                     actividad.setNombreActividad(nombreActividad);
                     actividad.setDescripcion(descripcion);
                     actividad.setFechaActividad(fechaActividad);
@@ -255,11 +247,11 @@ public class Controlador extends HttpServlet {
                     actividad.setHorasDadas(horasDadas);
                     actividad.setCuposDisponibles(cuposDisponibles);
                     actividad.setIdAdmin(idAdmin);
-                    actividad.setIdActividad(idActividad);
                     actividad.setImagen(imagen);
 
                     actividadDAO.actualizar(actividad);
 
+                    request.removeAttribute("actividadEncontrada");
                     List<Actividad> listaActividad = actividadDAO.listar();
                     request.setAttribute("actividades", listaActividad);
                     request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);

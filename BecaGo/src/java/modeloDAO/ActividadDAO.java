@@ -106,33 +106,44 @@ public class ActividadDAO {
         return actividad;
     }
 
-    public int actualizar(Actividad actividad){
-        String sql = "UPDATE Actividad SET nombreActividad=?, descripcion=?, fechaActividad=?, ubicacion=?, "
-                + "horasDadas=?, cuposDisponibles=?, idAdmin=?, imagen=? WHERE idActividad=?";
-        
+    public boolean actualizar(Actividad actividad){
         try {
             con = cn.Conexion();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, actividad.getNombreActividad());
-            ps.setString(2, actividad.getDescripcion());
-            ps.setTimestamp(3, actividad.getFechaActividad());
-            ps.setString(4, actividad.getUbicacion());
-            ps.setDouble(5, actividad.getHorasDadas());
-            ps.setInt(6, actividad.getCuposDisponibles());
-            ps.setInt(7, actividad.getIdAdmin());
             
-            if (actividad.getImagen() != null) {
+            if (actividad.getImagen() != null && actividad.getImagen().length > 0) {
+                String sql = "UPDATE Actividad SET nombreActividad=?, descripcion=?, fechaActividad=?, ubicacion=?, "
+                        + "horasDadas=?, cuposDisponibles=?, idAdmin=?, imagen=? WHERE idActividad=?";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, actividad.getNombreActividad());
+                ps.setString(2, actividad.getDescripcion());
+                ps.setTimestamp(3, actividad.getFechaActividad());
+                ps.setString(4, actividad.getUbicacion());
+                ps.setDouble(5, actividad.getHorasDadas());
+                ps.setInt(6, actividad.getCuposDisponibles());
+                ps.setInt(7, actividad.getIdAdmin());
                 ps.setBytes(8, actividad.getImagen());
+                ps.setInt(9, actividad.getIdActividad());
             } else {
-                ps.setNull(8, java.sql.Types.BLOB);
+                String sql = "UPDATE Actividad SET nombreActividad=?, descripcion=?, fechaActividad=?, ubicacion=?, "
+                        + "horasDadas=?, cuposDisponibles=?, idAdmin=? WHERE idActividad=?";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, actividad.getNombreActividad());
+                ps.setString(2, actividad.getDescripcion());
+                ps.setTimestamp(3, actividad.getFechaActividad());
+                ps.setString(4, actividad.getUbicacion());
+                ps.setDouble(5, actividad.getHorasDadas());
+                ps.setInt(6, actividad.getCuposDisponibles());
+                ps.setInt(7, actividad.getIdAdmin());
+                ps.setInt(8, actividad.getIdActividad());
             }
             
-            ps.setInt(9, actividad.getIdActividad());
-            resp = ps.executeUpdate();
+            int resultado = ps.executeUpdate();
+            return resultado > 0;
+            
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        return resp;
     }
     
     public void eliminar(int id){
