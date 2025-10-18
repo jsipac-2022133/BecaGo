@@ -1,0 +1,78 @@
+.bodyr {
+    background:linear-gradient(to left,#43A047, #d4fccc, #d4fccc, #43A047);
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+h1.title {
+    margin-top: 10;
+    margin-bottom: 30px;
+    font-size: 32px;
+    color: #43A047;
+    text-align: center;
+    font-weight: bold;
+}
+
+a.linkl {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+    border-color: #d4fccc;
+    outline: none;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    color: #43A047;
+}
+
+form {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px #43A047;
+    max-width: 500px;
+    width: 90%;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #43A047;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+    border-color: #d4fccc;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #43A047;
+}

@@ -65,36 +65,4 @@ public class AdministradorDAO {
         return admin;
     }
    
-    public boolean existeCorreo(String correo) {
-        String sql = "SELECT COUNT(*) FROM Administrador WHERE correoAdmin = ?";
-        try {
-            con = cn.Conexion();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, correo);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public boolean existeTel(String telefono) {
-        String sql = "SELECT COUNT(*) FROM Administrador WHERE telefono = ?";
-        try {
-            con = cn.Conexion();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, telefono);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-    
 }

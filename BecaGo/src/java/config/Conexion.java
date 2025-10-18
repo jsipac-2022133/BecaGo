@@ -8,18 +8,20 @@ package config;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ *
+ * @author SIPAC
+ */
 public class Conexion {
-    Connection con;
+    Connection conexion;
     
     public Connection Conexion(){
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_becago?useSSL=false&serverTimezone=UTC", "root", "luis1234");
-            System.out.println("DEBUG: Conexión a BD exitosa");
+            Class.forName("com.mysql.jdbc.Driver");
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_becago?useSSL=false", "root", "james");
         } catch (Exception e) {
-            System.out.println("DEBUG: Error de conexión a BD: " + e.getMessage());
             e.printStackTrace();
         }
-        return con;
+        return conexion;
     }
 }

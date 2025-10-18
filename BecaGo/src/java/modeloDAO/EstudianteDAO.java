@@ -70,35 +70,5 @@ public class EstudianteDAO {
         return estudiante;
     }
     
-    public boolean existeCorreo(String correo) {
-        String sql = "SELECT COUNT(*) FROM Estudiante WHERE correoEstudiante = ?";
-        try {
-            con = cn.Conexion();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, correo);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0; // Si el conteo es mayor a 0, existe
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public boolean existeTel(String telefono) {
-        String sql = "SELECT COUNT(*) FROM Estudiante WHERE telefono = ?";
-        try {
-            con = cn.Conexion();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, telefono);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }   
+    
 }

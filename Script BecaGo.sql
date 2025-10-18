@@ -3,9 +3,10 @@
 */
 
 drop database if exists db_becago;
+
 create database db_becago;
 
-use db_becago; # Seleccionar y rayito :)
+use db_becago;
 
 create table Administrador(
 	idAdmin int not null auto_increment,
