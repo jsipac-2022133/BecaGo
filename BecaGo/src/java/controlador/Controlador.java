@@ -17,9 +17,11 @@ import javax.servlet.annotation.MultipartConfig;
 import modelo.Actividad;
 import modelo.Administrador;
 import modelo.Estudiante;
+import modelo.Inscripcion;
 import modeloDAO.ActividadDAO;
 import modeloDAO.AdministradorDAO;
 import modeloDAO.EstudianteDAO;
+import modeloDAO.InscripcionDAO;
 
 @WebServlet(name = "Controlador", urlPatterns = {"/Controlador"})
 @MultipartConfig(maxFileSize = 16177215)
@@ -32,14 +34,17 @@ public class Controlador extends HttpServlet {
     Actividad actividad = new Actividad();
     ActividadDAO actividadDAO = new ActividadDAO();
     int idActividad;
+    Inscripcion inscripcion = new Inscripcion();
+    InscripcionDAO inscripcionDAO = new InscripcionDAO();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String menu = request.getParameter("menu");
         String accion = request.getParameter("accion");
 
-        HttpSession sessionActiva = request.getSession(false);
+        HttpSession sessionActiva = request.getSession();
         Administrador adminEnSesion = (Administrador) sessionActiva.getAttribute("administradorEnSesion");
+        Estudiante estudianteEnSesion = (Estudiante) sessionActiva.getAttribute("estudianteEnSesion");
 
         if (menu == null || menu.equals("Login")) {
             request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
@@ -92,7 +97,9 @@ public class Controlador extends HttpServlet {
                 if (correo.matches(".*\\d.*")) {
                     estudiante = estudianteDAO.validar(correo, password);
                     if (estudiante.getCorreoEstudiante() != null) {
-                        response.sendRedirect("Controlador?menu=Actividades%20Estudiante&accion=Listar");                        
+                        HttpSession session = request.getSession();
+                        session.setAttribute("estudianteEnSesion", estudiante);
+                        response.sendRedirect("Controlador?menu=Actividades%20Estudiante&accion=Listar");
                     } else {
                         request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
                     }
@@ -127,8 +134,7 @@ public class Controlador extends HttpServlet {
                     Part filePart = request.getPart("txtImagen");
                     byte[] imagen = null;
                     if (filePart != null && filePart.getSize() > 0) {
-                        try (InputStream inputStream = filePart.getInputStream();
-                                ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+                        try (InputStream inputStream = filePart.getInputStream(); ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
 
                             byte[] data = new byte[1024];
                             int bytesRead;
@@ -182,8 +188,7 @@ public class Controlador extends HttpServlet {
                     Part filePart = request.getPart("txtImagen");
                     byte[] imagen = null;
                     if (filePart != null && filePart.getSize() > 0) {
-                        try (InputStream inputStream = filePart.getInputStream();
-                                ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+                        try (InputStream inputStream = filePart.getInputStream(); ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
 
                             byte[] data = new byte[1024];
                             int bytesRead;
@@ -244,14 +249,27 @@ public class Controlador extends HttpServlet {
                 request.setAttribute("actividades", listaActividad);
                 request.getRequestDispatcher("vistas/ActividadEstudiante.jsp").forward(request, response);
             }
-        }else if(menu.equals("Home")){
+        } else if (menu.equals("Home")) {
             request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
-        }else if(menu.equals("InformacionActividad")){
-            if(accion.equals("Info Individual")){
-                idActividad=Integer.parseInt(request.getParameter("idActividad"));
-                Actividad actividad=actividadDAO.buscarActividad(idActividad);
+        } else if (menu.equals("InformacionActividad")) {
+            if (accion.equals("Info Individual")) {
+                idActividad = Integer.parseInt(request.getParameter("idActividad"));
+                Actividad actividad = actividadDAO.buscarActividad(idActividad);
                 request.setAttribute("actividadIndividual", actividad);
                 request.getRequestDispatcher("vistas/InformacionActividad.jsp").forward(request, response);
+            }
+        } else if (menu.equals("Inscripcion")) {
+            if (accion.equals("Agregar")) {
+                idActividad = Integer.parseInt(request.getParameter("idActividad"));
+                int idEstudiante = estudianteEnSesion.getIdEstudiante();
+                Timestamp fechaInscripcion = Timestamp.valueOf(LocalDateTime.now());
+                inscripcion.setIdActividad(idActividad);
+                inscripcion.setIdEstudiante(idEstudiante);
+                inscripcion.setFechaInscripcion(fechaInscripcion);
+                inscripcionDAO.Agregar(inscripcion);
+                request.getRequestDispatcher("Controlador?menu=InformacionActividad&accion=Info%20Individual&idActividad=" + idActividad)
+                        .forward(request, response);
+
             }
         }
     }

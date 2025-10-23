@@ -53,13 +53,15 @@ create table Inscripcion(
     idActividad int not null,
     idEstudiante int not null,
     fechaInscripcion datetime not null,
-    estado varchar(100) not null,
+    estado boolean default false,     
     primary key PK_idInscripcion(idInscripcion),
     constraint FK_Inscripcion_Actividad foreign key(idActividad)
 		references Actividad(idActividad) on delete cascade,
 	constraint FK_Inscripcion_Estudiante foreign key(idEstudiante)
 		references Estudiante(idEstudiante)
 );
+
+-- El atributo estado de Inscripcion indica si la actividad ya se realizó para poder asignarle las horas al estudiante
 
 create table Notificacion(
 	idNotificacion int not null auto_increment,
@@ -86,6 +88,6 @@ select * from Actividad;
 SELECT * FROM Actividad;
 
 
-
+select * from Inscripcion
 
 
