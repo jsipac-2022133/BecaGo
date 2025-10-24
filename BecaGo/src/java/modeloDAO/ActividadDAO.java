@@ -146,4 +146,18 @@ public class ActividadDAO {
             e.printStackTrace();
         }
     }
+    
+    public int reducirCupo(Actividad actividad, int nuevoCupo, int idActividad){
+        String sql="update Actividad set cuposDisponibles=? where idActividad=?";
+        try {
+            con=cn.Conexion();
+            ps=con.prepareStatement(sql);
+            ps.setInt(1, nuevoCupo);
+            ps.setInt(2, idActividad);
+            resp=ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resp;
+    }
 }

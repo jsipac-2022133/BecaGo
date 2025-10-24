@@ -256,6 +256,13 @@ public class Controlador extends HttpServlet {
                 idActividad = Integer.parseInt(request.getParameter("idActividad"));
                 Actividad actividad = actividadDAO.buscarActividad(idActividad);
                 request.setAttribute("actividadIndividual", actividad);
+                //esto es para bloquear el botón en el jsp xd
+                boolean yaInscrito = false;
+                if (estudianteEnSesion != null) {
+                    yaInscrito = inscripcionDAO.estaInscrito(estudianteEnSesion.getIdEstudiante(), idActividad);
+                }
+                request.setAttribute("yaInscrito", yaInscrito);
+
                 request.getRequestDispatcher("vistas/InformacionActividad.jsp").forward(request, response);
             }
         } else if (menu.equals("Inscripcion")) {
@@ -267,6 +274,12 @@ public class Controlador extends HttpServlet {
                 inscripcion.setIdEstudiante(idEstudiante);
                 inscripcion.setFechaInscripcion(fechaInscripcion);
                 inscripcionDAO.Agregar(inscripcion);
+                //actualizar cupoooo
+                ActividadDAO actividadCupo = new ActividadDAO();
+                Actividad actividad = actividadCupo.buscarActividad(idActividad);
+                int nuevoCupo = actividad.getCuposDisponibles() - 1;
+                actividadCupo.reducirCupo(actividad, nuevoCupo, idActividad);
+
                 request.getRequestDispatcher("Controlador?menu=InformacionActividad&accion=Info%20Individual&idActividad=" + idActividad)
                         .forward(request, response);
 
