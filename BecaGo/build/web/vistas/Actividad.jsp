@@ -11,11 +11,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Actividad - BecaGo</title>
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/estiloA.css"/>
     </head>
-    <body>
-        <h1><a>Agregar Actividad</a></h1>
-        
+    <body class = "boda">
         <form action="Controlador?menu=Actividad" method="POST" enctype="multipart/form-data">
+            <h1 class = "titlea"><a>Agregar Actividad</a></h1>
             <label>Nombre actividad</label>
             <input value="${actividadEncontrada.getNombreActividad()}" 
                    type="text" name="txtNombreActividad" placeholder="Nombre Actividad">

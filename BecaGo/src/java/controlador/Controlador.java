@@ -138,7 +138,7 @@ public class Controlador extends HttpServlet {
                         // Login exitoso
                         HttpSession session = request.getSession();
                         session.setAttribute("estudianteEnSesion", estudiante);
-                        request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
+                        response.sendRedirect("Controlador?menu=Actividades%20Estudiante&accion=Listar");
                     } else {
                         // Login fallido
                         request.setAttribute("error", "Correo y/o contraseña incorrecto(s)");
