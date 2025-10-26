@@ -11,6 +11,23 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>BecaGo - Login</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/estiloL.css"/>
+        <script>
+            
+            // Del botón para mostrar/ocultar la contraseña
+            function togglePassword() {
+                const passwordField = document.querySelector('input[name="txtPassword"]');
+                const toggleButton = document.querySelector('.toggle-password');
+                
+                if (passwordField.type === "password") {
+                    passwordField.type = "text";
+                    toggleButton.style.opacity = "1";
+                } else {
+                    passwordField.type = "password";
+                    toggleButton.style.opacity = "0.5";
+                }
+            }
+            
+        </script>
     </head>
     <body class="bodyl">
         <form action="Controlador?menu=Validar" method="POST">
@@ -18,8 +35,14 @@
             <label>Correo Electrónico</label>
             <input type="text" name="txtCorreo" placeholder="Correo Electrónico">
             <br>
+            
             <label>Password</label>
-            <input type="password" name="txtPassword" placeholder="Password">
+            <div class="password-container">
+                <input type="password" name="txtPassword" placeholder="Password">
+                <button type="button" class="toggle-password" onclick="togglePassword()">
+                    👁
+                </button>
+            </div>
             <br>
             
             <% 
