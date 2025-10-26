@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/estiloL.css"/>
         <script>
             
-            // Del botón para mostrar/ocultar la contraseña
+            // Botón para mostrar/ocultar la contraseña
             function togglePassword() {
                 const passwordField = document.querySelector('input[name="txtPassword"]');
                 const toggleButton = document.querySelector('.toggle-password');
@@ -36,7 +36,7 @@
             <input type="text" name="txtCorreo" placeholder="Correo Electrónico">
             <br>
             
-            <label>Password</label>
+            <label>Contraseña</label>
             <div class="password-container">
                 <input type="password" name="txtPassword" placeholder="Password">
                 <button type="button" class="toggle-password" onclick="togglePassword()">

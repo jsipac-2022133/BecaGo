@@ -161,6 +161,20 @@
                 }
             }
             
+            // Botón para mostrar/ocultar la contraseña
+            function togglePassword() {
+                const passwordField = document.querySelector('input[name="txtPassword"]');
+                const toggleButton = document.querySelector('.toggle-password');
+                
+                if (passwordField.type === "password") {
+                    passwordField.type = "text";
+                    toggleButton.style.opacity = "1";
+                } else {
+                    passwordField.type = "password";
+                    toggleButton.style.opacity = "0.5";
+                }
+            }
+            
             function mostrarCarreras() {
                 const facultad = document.getElementById("facultad").value;
                 const carreraField = document.getElementById("carreraField");
@@ -403,12 +417,17 @@
             <span id="errorTelefono" style="display:none; color:red;"></span>
             <span id="errorTelefonoExistente" style="display:none; color:red;"></span><br>
             
-            <label>Correo</label><br>
+            <label>Correo Electrónico</label><br>
             <input type="email" id="correo" name="txtCorreo" placeholder="usuario@uvg.edu.gt" onblur="validarCorreo()"">
             <span id="errorCorreo" style="display:none; color:red;"></span><br><br>
             
             <label>Contraseña</label>
-            <input type="password" id="password" name="txtPassword" placeholder="" onblur="validarPassword()"><br>
+            <div class="password-container">
+                <input type="password" id="password" name="txtPassword" placeholder="" onblur="validarPassword()">
+                <button type="button" class="toggle-password" onclick="togglePassword()">
+                    👁
+                </button>
+            </div>
             <span id="errorPassword" style="display:none; color:red;"></span><br>
 
             <div id="unidadDepto" style="display:none;">
