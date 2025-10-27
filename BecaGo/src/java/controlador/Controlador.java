@@ -8,12 +8,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-import javax.servlet.annotation.MultipartConfig;
+
 import modelo.Actividad;
 import modelo.Administrador;
 import modelo.Estudiante;
@@ -33,12 +34,13 @@ public class Controlador extends HttpServlet {
     EstudianteDAO estudianteDAO = new EstudianteDAO();
     Actividad actividad = new Actividad();
     ActividadDAO actividadDAO = new ActividadDAO();
-    int idActividad;
     Inscripcion inscripcion = new Inscripcion();
     InscripcionDAO inscripcionDAO = new InscripcionDAO();
+    int idActividad;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String menu = request.getParameter("menu");
         String accion = request.getParameter("accion");
 
@@ -48,11 +50,16 @@ public class Controlador extends HttpServlet {
 
         if (menu == null || menu.equals("Login")) {
             request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
+            return;
+        }
 
-        } else if (menu.equals("Register")) {
-            request.getRequestDispatcher("vistas/Register.jsp").forward(request, response);
+        // -------------------- REGISTRO --------------------
+        if (menu.equals("Register")) {
+            if (accion == null) {
+                request.getRequestDispatcher("vistas/Register.jsp").forward(request, response);
+                return;
+            }
 
-        } else if (menu.equals("Admin-Estudiante")) {
             if (accion.equals("Agregar Admin")) {
                 String nombreAdmin = request.getParameter("txtNombre");
                 String apellidoAdmin = request.getParameter("txtApellido");
@@ -60,25 +67,22 @@ public class Controlador extends HttpServlet {
                 String correoAdmin = request.getParameter("txtCorreo");
                 String passwordAdmin = request.getParameter("txtPassword");
                 String departamentoAdmin = request.getParameter("txtUnidadDepto");
-                
+
                 java.util.ArrayList<String> errores = new java.util.ArrayList<>();
-                
-                // Verifica si el correo ya existe
+
                 if (administradorDAO.existeCorreo(correoAdmin) || estudianteDAO.existeCorreo(correoAdmin)) {
                     errores.add("El correo ya está registrado");
                 }
-                // Verifica si el teléfono ya existe
                 if (administradorDAO.existeTel(telefonoAdmin) || estudianteDAO.existeTel(telefonoAdmin)) {
                     errores.add("El teléfono ya está registrado");
                 }
-                
-                // Muestra si hay errores
+
                 if (!errores.isEmpty()) {
                     request.setAttribute("errores", errores);
                     request.getRequestDispatcher("vistas/Register.jsp").forward(request, response);
                     return;
                 }
-                
+
                 administrador.setNombreAdmin(nombreAdmin);
                 administrador.setApellidoAdmin(apellidoAdmin);
                 administrador.setTelefono(telefonoAdmin);
@@ -86,9 +90,12 @@ public class Controlador extends HttpServlet {
                 administrador.setPasswordAdmin(passwordAdmin);
                 administrador.setNombreDepartamento(departamentoAdmin);
                 administradorDAO.Agregar(administrador);
-                request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
 
-            } else if (accion.equals("Agregar Estudiante")) {
+                request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
+                return;
+            }
+
+            if (accion.equals("Agregar Estudiante")) {
                 String nombreEstudiante = request.getParameter("txtNombre");
                 String apellidoEstudiante = request.getParameter("txtApellido");
                 String telefonoEstudiante = request.getParameter("txtTelefono");
@@ -96,25 +103,22 @@ public class Controlador extends HttpServlet {
                 String passwordEstudiante = request.getParameter("txtPassword");
                 String carreraEstudiante = request.getParameter("txtCarrera");
                 int horasAsignadas = Integer.parseInt(request.getParameter("txtHorasAsignadas"));
-                
+
                 java.util.ArrayList<String> errores = new java.util.ArrayList<>();
-                
-                // Verifica si el correo ya existe
+
                 if (estudianteDAO.existeCorreo(correoEstudiante) || administradorDAO.existeCorreo(correoEstudiante)) {
                     errores.add("El correo ya está registrado");
                 }
-                // Verifica si el teléfono ya existe
                 if (estudianteDAO.existeTel(telefonoEstudiante) || administradorDAO.existeTel(telefonoEstudiante)) {
                     errores.add("El teléfono ya está registrado");
                 }
-                
-                // Muestra si hay errores
+
                 if (!errores.isEmpty()) {
                     request.setAttribute("errores", errores);
                     request.getRequestDispatcher("vistas/Register.jsp").forward(request, response);
                     return;
                 }
-                
+
                 estudiante.setNombreEstudiante(nombreEstudiante);
                 estudiante.setApellidoEstudiante(apellidoEstudiante);
                 estudiante.setTelefono(telefonoEstudiante);
@@ -123,53 +127,47 @@ public class Controlador extends HttpServlet {
                 estudiante.setCarrera(carreraEstudiante);
                 estudiante.setHorasAsignadas(horasAsignadas);
                 estudianteDAO.Agregar(estudiante);
+
                 request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
+                return;
             }
+        }
 
-        } else if (menu.equals("Validar")) {
-            if (accion.equals("Login")) {
-                String correo = request.getParameter("txtCorreo");
-                String password = request.getParameter("txtPassword");
-                
-                if (correo.matches(".*\\d.*")) {
-                    // Es estudiante
-                    estudiante = estudianteDAO.validar(correo, password);
-                    if (estudiante.getCorreoEstudiante() != null) {
-                        // Login exitoso
-                        HttpSession session = request.getSession();
-                        session.setAttribute("estudianteEnSesion", estudiante);
-                        response.sendRedirect("Controlador?menu=Actividades%20Estudiante&accion=Listar");
-                    } else {
-                        // Login fallido
-                        request.setAttribute("error", "Correo y/o contraseña incorrecto(s)");
+        // -------------------- LOGIN --------------------
+        if (menu.equals("Validar") && "Login".equals(accion)) {
+            String correo = request.getParameter("txtCorreo");
+            String password = request.getParameter("txtPassword");
+
+            administrador = administradorDAO.validar(correo, password);
+            estudiante = estudianteDAO.validar(correo, password);
+
+            if (administrador.getCorreoAdmin() != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("administradorEnSesion", administrador);
+
+                List<Actividad> listaActividad = actividadDAO.listar();
+                request.setAttribute("actividades", listaActividad);
+                request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
+                return;
+
+            } else if (estudiante.getCorreoEstudiante() != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("estudianteEnSesion", estudiante);
+                response.sendRedirect("Controlador?menu=Actividades%20Estudiante&accion=Listar");
+                return;
+            } else {
+                request.setAttribute("error", "Correo y/o contraseña incorrectos");
                 request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
-                    }
-                    
-                } else {
-                    // Es administrador
-                    administrador = administradorDAO.validar(correo, password);
-                    if (administrador.getCorreoAdmin() != null) {
-                        // Login exitoso
-                        HttpSession session = request.getSession();
-                        session.setAttribute("administradorEnSesion", administrador);
-                
-                        // Lista actividades
-                        List<Actividad> listaActividad = actividadDAO.listar();
-                        request.setAttribute("actividades", listaActividad);
-                
-                        request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
-                    } else {
-                        // Login fallido
-                        request.setAttribute("error", "Correo y/o contraseña incorrecto(s)");
-                        request.getRequestDispatcher("vistas/Login.jsp").forward(request, response);
-                    }
-                }
+                return;
             }
+        }
 
-        } else if (menu.equals("Actividad")) {
+        // -------------------- ACTIVIDADES (ADMIN) --------------------
+        if (menu.equals("Actividad")) {
+            if (accion == null) accion = "";
 
-            if (accion != null) {
-                if (accion.equals("Agregar")) {
+            switch (accion) {
+                case "Agregar": {
                     String nombreActividad = request.getParameter("txtNombreActividad");
                     String descripcion = request.getParameter("txtDescripcion");
                     String fechaString = request.getParameter("txtFechaActividad");
@@ -183,17 +181,14 @@ public class Controlador extends HttpServlet {
                     Part filePart = request.getPart("txtImagen");
                     byte[] imagen = null;
                     if (filePart != null && filePart.getSize() > 0) {
-                        try (InputStream inputStream = filePart.getInputStream(); ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-
+                        try (InputStream inputStream = filePart.getInputStream();
+                             ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
                             byte[] data = new byte[1024];
                             int bytesRead;
                             while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
                                 buffer.write(data, 0, bytesRead);
                             }
                             imagen = buffer.toByteArray();
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         }
                     }
 
@@ -212,18 +207,19 @@ public class Controlador extends HttpServlet {
                     request.setAttribute("actividades", listaActividad);
                     request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
                     return;
+                }
 
-                } else if (accion.equals("Editar")) {
+                case "Editar": {
                     idActividad = Integer.parseInt(request.getParameter("idActividad"));
                     Actividad actividadEncontrada = actividadDAO.buscarActividad(idActividad);
                     request.setAttribute("actividadEncontrada", actividadEncontrada);
-
-                    List<Actividad> listaActividad = actividadDAO.listar();
-                    request.setAttribute("actividades", listaActividad);
+                    request.setAttribute("actividades", actividadDAO.listar());
                     request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
                     return;
+                }
 
-                } else if (accion.equals("Actualizar")) {
+                case "Actualizar": {
+                    int idActividadActualizar = Integer.parseInt(request.getParameter("idActividad"));
                     String nombreActividad = request.getParameter("txtNombreActividad");
                     String descripcion = request.getParameter("txtDescripcion");
                     String fechaString = request.getParameter("txtFechaActividad");
@@ -235,22 +231,22 @@ public class Controlador extends HttpServlet {
                     int idAdmin = adminEnSesion.getIdAdmin();
 
                     Part filePart = request.getPart("txtImagen");
-                    byte[] imagen = null;
+                    byte[] imagen;
                     if (filePart != null && filePart.getSize() > 0) {
-                        try (InputStream inputStream = filePart.getInputStream(); ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-
+                        try (InputStream inputStream = filePart.getInputStream();
+                             ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
                             byte[] data = new byte[1024];
                             int bytesRead;
                             while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
                                 buffer.write(data, 0, bytesRead);
                             }
                             imagen = buffer.toByteArray();
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         }
+                    } else {
+                        imagen = actividadDAO.buscarActividad(idActividadActualizar).getImagen();
                     }
 
+                    actividad.setIdActividad(idActividadActualizar);
                     actividad.setNombreActividad(nombreActividad);
                     actividad.setDescripcion(descripcion);
                     actividad.setFechaActividad(fechaActividad);
@@ -258,26 +254,23 @@ public class Controlador extends HttpServlet {
                     actividad.setHorasDadas(horasDadas);
                     actividad.setCuposDisponibles(cuposDisponibles);
                     actividad.setIdAdmin(idAdmin);
-                    actividad.setIdActividad(idActividad);
                     actividad.setImagen(imagen);
 
                     actividadDAO.actualizar(actividad);
-
-                    List<Actividad> listaActividad = actividadDAO.listar();
-                    request.setAttribute("actividades", listaActividad);
+                    request.setAttribute("actividades", actividadDAO.listar());
                     request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
                     return;
+                }
 
-                } else if (accion.equals("Eliminar")) {
+                case "Eliminar": {
                     idActividad = Integer.parseInt(request.getParameter("idActividad"));
                     actividadDAO.eliminar(idActividad);
-
-                    List<Actividad> listaActividad = actividadDAO.listar();
-                    request.setAttribute("actividades", listaActividad);
+                    request.setAttribute("actividades", actividadDAO.listar());
                     request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
                     return;
+                }
 
-                } else if (accion.equals("VerImagen")) {
+                case "VerImagen": {
                     int id = Integer.parseInt(request.getParameter("idActividad"));
                     Actividad act = actividadDAO.buscarActividad(id);
                     byte[] imgData = act.getImagen();
@@ -287,51 +280,144 @@ public class Controlador extends HttpServlet {
                     }
                     return;
                 }
-            }
 
+                default:
+                    request.setAttribute("actividades", actividadDAO.listar());
+                    request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
+                    return;
+            }
+        }
+
+        // -------------------- ACTIVIDADES (ESTUDIANTE) --------------------
+        if (menu.equals("Actividades Estudiante") && "Listar".equals(accion)) {
             List<Actividad> listaActividad = actividadDAO.listar();
             request.setAttribute("actividades", listaActividad);
-            request.getRequestDispatcher("vistas/Actividad.jsp").forward(request, response);
-        } else if (menu.equals("Actividades Estudiante")) {
-            if (accion.equals("Listar")) {
-                List<Actividad> listaActividad = actividadDAO.listar();
-                request.setAttribute("actividades", listaActividad);
-                request.getRequestDispatcher("vistas/ActividadEstudiante.jsp").forward(request, response);
-            }
-        } else if (menu.equals("Home")) {
+            request.getRequestDispatcher("vistas/ActividadEstudiante.jsp").forward(request, response);
+            return;
+        }
+
+        // -------------------- HOME --------------------
+        if (menu.equals("Home")) {
             request.getRequestDispatcher("vistas/Home.jsp").forward(request, response);
-        } else if (menu.equals("InformacionActividad")) {
-            if (accion.equals("Info Individual")) {
-                idActividad = Integer.parseInt(request.getParameter("idActividad"));
-                Actividad actividad = actividadDAO.buscarActividad(idActividad);
-                request.setAttribute("actividadIndividual", actividad);
-                //esto es para bloquear el botón en el jsp xd
-                boolean yaInscrito = false;
-                if (estudianteEnSesion != null) {
-                    yaInscrito = inscripcionDAO.estaInscrito(estudianteEnSesion.getIdEstudiante(), idActividad);
-                }
-                request.setAttribute("yaInscrito", yaInscrito);
+            return;
+        }
 
-                request.getRequestDispatcher("vistas/InformacionActividad.jsp").forward(request, response);
+        // -------------------- INFORMACIÓN DE ACTIVIDAD --------------------
+        if (menu.equals("InformacionActividad") && "Info Individual".equals(accion)) {
+            idActividad = Integer.parseInt(request.getParameter("idActividad"));
+            Actividad actividadInfo = actividadDAO.buscarActividad(idActividad);
+            request.setAttribute("actividadIndividual", actividadInfo);
+            boolean yaInscrito = estudianteEnSesion != null &&
+                    inscripcionDAO.estaInscrito(estudianteEnSesion.getIdEstudiante(), idActividad);
+            request.setAttribute("yaInscrito", yaInscrito);
+            request.getRequestDispatcher("vistas/InformacionActividad.jsp").forward(request, response);
+            return;
+        }
+
+        // -------------------- INSCRIPCIÓN --------------------
+        if (menu.equals("Inscripcion") && "Agregar".equals(accion)) {
+            idActividad = Integer.parseInt(request.getParameter("idActividad"));
+            int idEstudiante = estudianteEnSesion.getIdEstudiante();
+            Timestamp fechaInscripcion = Timestamp.valueOf(LocalDateTime.now());
+
+            inscripcion.setIdActividad(idActividad);
+            inscripcion.setIdEstudiante(idEstudiante);
+            inscripcion.setFechaInscripcion(fechaInscripcion);
+            inscripcionDAO.Agregar(inscripcion);
+
+            Actividad actividadCupo = actividadDAO.buscarActividad(idActividad);
+            int nuevoCupo = actividadCupo.getCuposDisponibles() - 1;
+            actividadDAO.reducirCupo(actividadCupo, nuevoCupo, idActividad);
+
+            request.getRequestDispatcher("Controlador?menu=InformacionActividad&accion=Info%20Individual&idActividad=" + idActividad)
+                    .forward(request, response);
+            return;
+        }
+
+        // -------------------- PERFIL --------------------
+        if (menu.equals("Perfil")) {
+            if (accion == null) {
+                response.sendRedirect("Controlador?menu=Perfil&accion=Ver");
+                return;
             }
-        } else if (menu.equals("Inscripcion")) {
-            if (accion.equals("Agregar")) {
-                idActividad = Integer.parseInt(request.getParameter("idActividad"));
-                int idEstudiante = estudianteEnSesion.getIdEstudiante();
-                Timestamp fechaInscripcion = Timestamp.valueOf(LocalDateTime.now());
-                inscripcion.setIdActividad(idActividad);
-                inscripcion.setIdEstudiante(idEstudiante);
-                inscripcion.setFechaInscripcion(fechaInscripcion);
-                inscripcionDAO.Agregar(inscripcion);
-                //actualizar cupoooo
-                ActividadDAO actividadCupo = new ActividadDAO();
-                Actividad actividad = actividadCupo.buscarActividad(idActividad);
-                int nuevoCupo = actividad.getCuposDisponibles() - 1;
-                actividadCupo.reducirCupo(actividad, nuevoCupo, idActividad);
 
-                request.getRequestDispatcher("Controlador?menu=InformacionActividad&accion=Info%20Individual&idActividad=" + idActividad)
-                        .forward(request, response);
+            switch (accion) {
+                case "Ver":
+                    if (estudianteEnSesion != null) {
+                        Estudiante estudianteActualizado = estudianteDAO.buscarPorId(estudianteEnSesion.getIdEstudiante());
+                        sessionActiva.setAttribute("estudianteEnSesion", estudianteActualizado);
+                    } else if (adminEnSesion != null) {
+                        Administrador adminActualizado = administradorDAO.buscarPorId(adminEnSesion.getIdAdmin());
+                        sessionActiva.setAttribute("administradorEnSesion", adminActualizado);
+                    }
+                    request.getRequestDispatcher("vistas/Perfil.jsp").forward(request, response);
+                    return;
 
+                case "Editar":
+                    request.getRequestDispatcher("vistas/EditarPerfil.jsp").forward(request, response);
+                    return;
+
+                case "ActualizarEstudiante": {
+                    int idEstudiante = Integer.parseInt(request.getParameter("idEstudiante"));
+                    String nombre = request.getParameter("txtNombre");
+                    String apellido = request.getParameter("txtApellido");
+                    String telefono = request.getParameter("txtTelefono");
+                    String carrera = request.getParameter("txtCarrera");
+                    String password = request.getParameter("txtPassword");
+
+                    Estudiante estudianteActualizar = new Estudiante();
+                    estudianteActualizar.setIdEstudiante(idEstudiante);
+                    estudianteActualizar.setNombreEstudiante(nombre);
+                    estudianteActualizar.setApellidoEstudiante(apellido);
+                    estudianteActualizar.setTelefono(telefono);
+                    estudianteActualizar.setCarrera(carrera);
+                    estudianteActualizar.setPasswordEstudiante(password);
+
+                    boolean actualizado = estudianteDAO.actualizar(estudianteActualizar);
+                    if (actualizado) {
+                        Estudiante estudianteNuevo = estudianteDAO.buscarPorId(idEstudiante);
+                        sessionActiva.setAttribute("estudianteEnSesion", estudianteNuevo);
+                        request.setAttribute("mensaje", "Perfil actualizado correctamente");
+                    } else {
+                        request.setAttribute("error", "Error al actualizar el perfil");
+                    }
+
+                    request.getRequestDispatcher("vistas/Perfil.jsp").forward(request, response);
+                    return;
+                }
+
+                case "ActualizarAdmin": {
+                    int idAdmin = Integer.parseInt(request.getParameter("idAdmin"));
+                    String nombre = request.getParameter("txtNombre");
+                    String apellido = request.getParameter("txtApellido");
+                    String telefono = request.getParameter("txtTelefono");
+                    String departamento = request.getParameter("txtDepartamento");
+                    String password = request.getParameter("txtPassword");
+
+                    Administrador adminActualizar = new Administrador();
+                    adminActualizar.setIdAdmin(idAdmin);
+                    adminActualizar.setNombreAdmin(nombre);
+                    adminActualizar.setApellidoAdmin(apellido);
+                    adminActualizar.setTelefono(telefono);
+                    adminActualizar.setNombreDepartamento(departamento);
+                    adminActualizar.setPasswordAdmin(password);
+
+                    boolean actualizado = administradorDAO.actualizar(adminActualizar);
+                    if (actualizado) {
+                        Administrador adminNuevo = administradorDAO.buscarPorId(idAdmin);
+                        sessionActiva.setAttribute("administradorEnSesion", adminNuevo);
+                        request.setAttribute("mensaje", "Perfil actualizado correctamente");
+                    } else {
+                        request.setAttribute("error", "Error al actualizar el perfil");
+                    }
+
+                    request.getRequestDispatcher("vistas/Perfil.jsp").forward(request, response);
+                    return;
+                }
+
+                default:
+                    response.sendRedirect("Controlador?menu=Perfil&accion=Ver");
+                    return;
             }
         }
     }
