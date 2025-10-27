@@ -18,7 +18,6 @@
             <ul>
                 <li><a href="Controlador?menu=Home">Home</a></li>
                 <li><a href="Controlador?menu=Actividades%20Estudiante&accion=Listar">Actividades</a></li>
-                <li><a href="Controlador?menu=Perfil&accion=Ver">Mi Perfil</a></li>
                 <li><a href="#">Inscripciones</a></li>
                 <li><a href="#">Resumen</a></li>
                 <li><a href="#">Logout</a></li>

@@ -22,27 +22,3 @@
     text-align: justify;
 }
 
-.botones-home {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 2rem;
-}
-
-.btn-perfil, .btn-actividades {
-    display: inline-block;
-    background: #4CAF50;
-    color: white;
-    padding: 12px 25px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.btn-perfil:hover, .btn-actividades:hover {
-    background: #45a049;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-}
-

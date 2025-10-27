@@ -23,10 +23,7 @@
                         que más te interesen. Estamos para apoyarte en tu desarrollo académico y personal.
                         Cualquier duda no dudes en contactarnos.
                     </p>
-                   <div class="botones-home">
-                        <a href="Controlador?menu=Perfil&accion=Ver" class="btn-perfil">Mi Perfil</a>
-                        <a href="Controlador?menu=Actividades%20Estudiante&accion=Listar" class="btn-actividades">Ver Actividades</a>
-                    </div>
+                   
                     </div>
                 </section>
             </main> 

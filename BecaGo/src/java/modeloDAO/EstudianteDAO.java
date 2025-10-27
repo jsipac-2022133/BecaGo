@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import modelo.Estudiante;
-import java.sql.SQLException;
 
 /**
  *
@@ -102,91 +101,5 @@ public class EstudianteDAO {
         }
         return false;
     }
-    public Estudiante buscarPorId(int id) {
-    Connection conn = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-    Estudiante estudiante = null;
     
-    try {
-        Conexion cn = new Conexion();
-        conn = cn.Conexion();
-        String sql = "SELECT * FROM Estudiante WHERE idEstudiante = ?";
-        ps = conn.prepareStatement(sql);
-        ps.setInt(1, id);
-        rs = ps.executeQuery();
-        
-        if (rs.next()) {
-            estudiante = new Estudiante();
-            estudiante.setIdEstudiante(rs.getInt("idEstudiante"));
-            estudiante.setNombreEstudiante(rs.getString("nombreEstudiante"));
-            estudiante.setApellidoEstudiante(rs.getString("apellidoEstudiante"));
-            estudiante.setTelefono(rs.getString("telefono"));
-            estudiante.setCorreoEstudiante(rs.getString("correoEstudiante"));
-            estudiante.setPasswordEstudiante(rs.getString("passwordEstudiante"));
-            estudiante.setCarrera(rs.getString("carrera"));
-            estudiante.setHorasAsignadas(rs.getInt("horasAsignadas"));
-            estudiante.setHorasCumplidas(rs.getInt("horasCumplidas"));
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (conn != null) conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    return estudiante;
-}
-    
-    public boolean actualizar(Estudiante estudiante) {
-    Connection conn = null;
-    PreparedStatement ps = null;
-    PreparedStatement psPass = null;
-    ResultSet rsPass = null;
-    
-    try {
-        Conexion cn = new Conexion();
-        conn = cn.Conexion();
-        String sql = "UPDATE Estudiante SET nombreEstudiante=?, apellidoEstudiante=?, telefono=?, correoEstudiante=?, carrera=?, passwordEstudiante=? WHERE idEstudiante=?";
-        ps = conn.prepareStatement(sql);
-        ps.setString(1, estudiante.getNombreEstudiante());
-        ps.setString(2, estudiante.getApellidoEstudiante());
-        ps.setString(3, estudiante.getTelefono());
-        ps.setString(4, estudiante.getCorreoEstudiante());
-        ps.setString(5, estudiante.getCarrera());
-        
-        if (estudiante.getPasswordEstudiante() != null && !estudiante.getPasswordEstudiante().isEmpty()) {
-            ps.setString(6, estudiante.getPasswordEstudiante());
-        } else {
-            String sqlPass = "SELECT passwordEstudiante FROM Estudiante WHERE idEstudiante=?";
-            psPass = conn.prepareStatement(sqlPass);
-            psPass.setInt(1, estudiante.getIdEstudiante());
-            rsPass = psPass.executeQuery();
-            if (rsPass.next()) {
-                ps.setString(6, rsPass.getString("passwordEstudiante"));
-            }
-        }
-        
-        ps.setInt(7, estudiante.getIdEstudiante());
-        return ps.executeUpdate() > 0;
-        
-    } catch (Exception e) {
-        e.printStackTrace();
-        return false;
-    } finally {
-        try {
-            if (rsPass != null) rsPass.close();
-            if (psPass != null) psPass.close();
-            if (ps != null) ps.close();
-            if (conn != null) conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
 }
