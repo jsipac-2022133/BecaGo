@@ -14,6 +14,17 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/estiloA.css"/>
     </head>
     <body class = "boda">
+        
+        <nav>
+            <ul>
+                <li><a href="Controlador?menu=Home">Home</a></li>
+                <li><a href="Controlador?menu=Actividad">Actividades</a></li>
+                <li><a href="Controlador?menu=Inscripcion&accion=Listar">Inscripciones</a></li>
+                <li><a href="#">Resumen</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+        
         <form action="Controlador?menu=Actividad" method="POST" enctype="multipart/form-data">
             <h1 class = "titlea"><a>Agregar Actividad</a></h1>
             <label>Nombre actividad</label>

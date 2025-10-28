@@ -92,3 +92,18 @@ inner join Inscripcion as i
 on i.idActividad=a.idActividad
 where i.idEstudiante=1
 */
+
+/*select a.nombreActividad, e.nombreEstudiante, e.apellidoEstudiante, e.correoEstudiante, i.estado, a.cuposDisponibles
+from Actividad as a 
+inner join Inscripcion as i
+on i.idActividad=a.idActividad
+inner join Estudiante as e
+on i.idEstudiante=e.idEstudiante
+*/
+
+
+
+
+
+
+

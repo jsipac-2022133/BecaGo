@@ -1,5 +1,6 @@
 package controlador;
 
+import dto.ActividadEstudianteDTO;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
@@ -331,7 +332,10 @@ public class Controlador extends HttpServlet {
 
                 request.getRequestDispatcher("Controlador?menu=InformacionActividad&accion=Info%20Individual&idActividad=" + idActividad)
                         .forward(request, response);
-
+            }else if(accion.equals("Listar")){
+                List<ActividadEstudianteDTO> lista=inscripcionDAO.listarPorInscripcionColectivo();
+                request.setAttribute("inscripcionesColectivas", lista);
+                request.getRequestDispatcher("vistas/Inscripcion.jsp").forward(request, response);
             }
         } else if(menu.equals("Inscripciones Estudiante")){
             if(accion.equals("Listar")){

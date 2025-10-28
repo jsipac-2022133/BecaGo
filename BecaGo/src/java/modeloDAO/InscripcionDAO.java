@@ -9,6 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import modelo.Inscripcion;
+import dto.ActividadEstudianteDTO;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -60,6 +63,36 @@ public class InscripcionDAO {
         }
 
         return inscrito;
-    }    
+    }
+
+    //este método incorpora atributos de 3 entidades (no tocar)
+    public List<ActividadEstudianteDTO> listarPorInscripcionColectivo() {
+        List<ActividadEstudianteDTO> lista = new ArrayList<>();
+
+        String sql = "SELECT a.nombreActividad, e.nombreEstudiante, e.apellidoEstudiante, e.correoEstudiante, i.estado, a.cuposDisponibles " +
+             "FROM Actividad AS a " +
+             "INNER JOIN Inscripcion AS i ON i.idActividad = a.idActividad " +
+             "INNER JOIN Estudiante AS e ON i.idEstudiante = e.idEstudiante " +
+             "ORDER BY a.nombreActividad, e.apellidoEstudiante, e.nombreEstudiante";        
+        try {
+            con=cn.Conexion();
+            ps=con.prepareStatement(sql);
+            rs=ps.executeQuery();
+            
+            while(rs.next()){
+                ActividadEstudianteDTO dto=new ActividadEstudianteDTO();
+                dto.setNombreActividad(rs.getString("nombreActividad"));
+                dto.setNombreEstudiante(rs.getString("nombreEstudiante"));
+                dto.setApellidoEstudiante(rs.getString("apellidoEstudiante"));
+                dto.setCorreoEstudiante(rs.getString("correoEstudiante"));
+                dto.setEstado(rs.getBoolean("estado"));
+                dto.setCuposDisponibles(rs.getInt("cuposDisponibles"));
+                lista.add(dto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
 
 }
