@@ -4,6 +4,8 @@
  */
 package dto;
 
+import java.sql.Timestamp;
+
 /**
  *
  * @author James
@@ -16,18 +18,22 @@ public class ActividadEstudianteDTO {
     private String correoEstudiante;
     private boolean estado;
     private int cuposDisponibles;
+    private Timestamp fechaActividad;
 
     public ActividadEstudianteDTO() {
     }
 
-    public ActividadEstudianteDTO(String nombreActividad, String nombreEstudiante, String apellidoEstudiante, String correoEstudiante, boolean estado, int cuposDisponibles) {
+    public ActividadEstudianteDTO(String nombreActividad, String nombreEstudiante, String apellidoEstudiante, String correoEstudiante, boolean estado, int cuposDisponibles, Timestamp fechaActividad) {
         this.nombreActividad = nombreActividad;
         this.nombreEstudiante = nombreEstudiante;
         this.apellidoEstudiante = apellidoEstudiante;
         this.correoEstudiante = correoEstudiante;
         this.estado = estado;
         this.cuposDisponibles = cuposDisponibles;
+        this.fechaActividad = fechaActividad;
     }
+
+    
 
     public String getNombreActividad() {
         return nombreActividad;
@@ -77,4 +83,13 @@ public class ActividadEstudianteDTO {
         this.cuposDisponibles = cuposDisponibles;
     }
 
+    public Timestamp getFechaActividad() {
+        return fechaActividad;
+    }
+
+    public void setFechaActividad(Timestamp fechaActividad) {
+        this.fechaActividad = fechaActividad;
+    }
+
+    
 }

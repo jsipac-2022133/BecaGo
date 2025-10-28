@@ -69,7 +69,8 @@ public class InscripcionDAO {
     public List<ActividadEstudianteDTO> listarPorInscripcionColectivo() {
         List<ActividadEstudianteDTO> lista = new ArrayList<>();
 
-        String sql = "SELECT a.nombreActividad, e.nombreEstudiante, e.apellidoEstudiante, e.correoEstudiante, i.estado, a.cuposDisponibles " +
+        String sql = "SELECT a.nombreActividad, e.nombreEstudiante, e.apellidoEstudiante, "
+                + "e.correoEstudiante, i.estado, a.cuposDisponibles, a.fechaActividad  " +
              "FROM Actividad AS a " +
              "INNER JOIN Inscripcion AS i ON i.idActividad = a.idActividad " +
              "INNER JOIN Estudiante AS e ON i.idEstudiante = e.idEstudiante " +
@@ -87,6 +88,7 @@ public class InscripcionDAO {
                 dto.setCorreoEstudiante(rs.getString("correoEstudiante"));
                 dto.setEstado(rs.getBoolean("estado"));
                 dto.setCuposDisponibles(rs.getInt("cuposDisponibles"));
+                dto.setFechaActividad(rs.getTimestamp("fechaActividad"));
                 lista.add(dto);
             }
         } catch (Exception e) {

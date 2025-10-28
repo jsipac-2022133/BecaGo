@@ -3,7 +3,7 @@
     Created on : 27/10/2025, 20:59:16
     Author     : James
 --%>
-<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
@@ -28,6 +28,7 @@
 
     <c:set var="ultimaActividad" value="" />
     <c:set var="ultimoCupo" value="0" />
+    <c:set var="ultimaFecha" value="" />
 
     <c:forEach var="inscripcion" items="${inscripcionesColectivas}" varStatus="status">
 
@@ -35,6 +36,7 @@
             <c:if test="${!empty ultimaActividad}">
                 </tbody></table>
                 <p><b>Cupos disponibles:</b> ${ultimoCupo}</p>
+                <p><b>Fecha de actividad:</b> ${ultimaFecha}</p>
                 <br>
             </c:if>
 
@@ -48,6 +50,8 @@
                     </tr>
                 </thead>
                 <tbody>
+
+            <c:set var="ultimaFecha" value="${inscripcion.fechaActividad}" />
         </c:if>
 
         <tr>
@@ -67,6 +71,7 @@
         <c:if test="${status.last}">
             </tbody></table>
             <p><b>Cupos disponibles:</b> ${ultimoCupo}</p>
+            <p><b>Fecha de actividad:</b> ${ultimaFecha}</p>
         </c:if>
 
     </c:forEach>
