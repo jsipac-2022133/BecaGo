@@ -85,3 +85,10 @@ select * from Actividad;
 select * from Inscripcion
 
 
+/* 
+select a.nombreActividad, a.fechaActividad, a.ubicacion 
+from Actividad as a 
+inner join Inscripcion as i
+on i.idActividad=a.idActividad
+where i.idEstudiante=1
+*/

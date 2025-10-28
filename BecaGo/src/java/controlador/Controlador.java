@@ -333,6 +333,13 @@ public class Controlador extends HttpServlet {
                         .forward(request, response);
 
             }
+        } else if(menu.equals("Inscripciones Estudiante")){
+            if(accion.equals("Listar")){
+            int idEstudiante=estudianteEnSesion.getIdEstudiante();
+            List<Actividad> listaActividad=actividadDAO.listarPorInscripcionIndividual(idEstudiante);
+            request.setAttribute("inscripcionesIndividuales", listaActividad);
+            request.getRequestDispatcher("vistas/InscripcionEstudiante.jsp").forward(request, response);
+            }
         }
     }
 

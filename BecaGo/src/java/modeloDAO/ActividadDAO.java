@@ -160,4 +160,33 @@ public class ActividadDAO {
         }
         return resp;
     }
+    
+    public List<Actividad> listarPorInscripcionIndividual(int idEstudiante) {
+        String sql = "select a.nombreActividad, a.fechaActividad, a.ubicacion \n"
+                + "from Actividad as a \n"
+                + "inner join Inscripcion as i\n"
+                + "on i.idActividad=a.idActividad\n"
+                + "where i.idEstudiante=?";
+        
+        List<Actividad> listaActividad=new ArrayList<>();
+        
+        try {
+            con=cn.Conexion();
+            ps=con.prepareStatement(sql);
+            ps.setInt(1, idEstudiante);
+            rs=ps.executeQuery();
+            
+            while(rs.next()){
+                Actividad actividad=new Actividad();
+                actividad.setNombreActividad(rs.getString("nombreActividad"));
+                actividad.setFechaActividad(rs.getTimestamp("fechaActividad"));
+                actividad.setUbicacion(rs.getString("ubicacion"));
+                listaActividad.add(actividad);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listaActividad;
+    }
 }

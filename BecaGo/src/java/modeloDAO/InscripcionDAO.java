@@ -60,6 +60,6 @@ public class InscripcionDAO {
         }
 
         return inscrito;
-    }
+    }    
 
 }
