@@ -102,4 +102,28 @@ public class EstudianteDAO {
         return false;
     }
     
+    public int actualizar(Estudiante estudiante) {
+    String sql = "UPDATE Estudiante SET nombreEstudiante=?, apellidoEstudiante=?, telefono=?, "
+               + "correoEstudiante=?, passwordEstudiante=?, carrera=?, horasAsignadas=?, horasCumplidas=? "
+               + "WHERE idEstudiante=?";
+    
+    try {
+        con = cn.Conexion();
+        ps = con.prepareStatement(sql);
+        ps.setString(1, estudiante.getNombreEstudiante());
+        ps.setString(2, estudiante.getApellidoEstudiante());
+        ps.setString(3, estudiante.getTelefono());
+        ps.setString(4, estudiante.getCorreoEstudiante());
+        ps.setString(5, estudiante.getPasswordEstudiante());
+        ps.setString(6, estudiante.getCarrera());
+        ps.setInt(7, estudiante.getHorasAsignadas());
+        ps.setInt(8, estudiante.getHorasCumplidas());
+        ps.setInt(9, estudiante.getIdEstudiante());
+        resp = ps.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return resp;
+}
+    
 }

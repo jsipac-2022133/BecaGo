@@ -96,5 +96,26 @@ public class AdministradorDAO {
         }
         return false;
     }
+    
+    public int actualizar(Administrador admin) {
+    String sql = "UPDATE Administrador SET nombreAdmin=?, apellidoAdmin=?, telefono=?, "
+               + "correoAdmin=?, passwordAdmin=?, nombreDepartamento=? WHERE idAdmin=?";
+    
+    try {
+        con = cn.Conexion();
+        ps = con.prepareStatement(sql);
+        ps.setString(1, admin.getNombreAdmin());
+        ps.setString(2, admin.getApellidoAdmin());
+        ps.setString(3, admin.getTelefono());
+        ps.setString(4, admin.getCorreoAdmin());
+        ps.setString(5, admin.getPasswordAdmin());
+        ps.setString(6, admin.getNombreDepartamento());
+        ps.setInt(7, admin.getIdAdmin());
+        resp = ps.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return resp;
+}
    
 }

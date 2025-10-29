@@ -21,6 +21,7 @@
                 <li><a href="Controlador?menu=Actividad">Actividades</a></li>
                 <li><a href="Controlador?menu=Inscripcion&accion=Listar">Inscripciones</a></li>
                 <li><a href="#">Resumen</a></li>
+                <a href="Controlador?menu=Perfil&accion=Mostrar" class="profile-link">Mi Perfil</a>
                 <li><a href="#">Logout</a></li>
             </ul>
         </nav>

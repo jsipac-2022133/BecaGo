@@ -22,6 +22,7 @@
                         sencilla y eficiente. Podrás ver tu progreso y enlistarte a las actividades
                         que más te interesen. Estamos para apoyarte en tu desarrollo académico y personal.
                         Cualquier duda no dudes en contactarnos.
+                          <li><a href="Controlador?menu=Perfil&accion=Mostrar" class="profile-btn">Mi Perfil</a></li>
                     </p>
                    
                     </div>

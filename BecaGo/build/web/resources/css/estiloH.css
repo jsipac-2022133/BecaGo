@@ -22,3 +22,25 @@
     text-align: justify;
 }
 
+/* estilo del boton xd (asi no se ve todo feo jsjsj) */
+.profile-btn {
+    background: linear-gradient(135deg, #43A047 0%, #2E7D32 100%);
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid #43A047;
+    display: inline-block;
+}
+
+.profile-btn:hover {
+    background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(67, 160, 71, 0.4);
+    border-color: #2E7D32;
+    color: white;
+    text-decoration: none;
+}
+
