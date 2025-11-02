@@ -8,6 +8,38 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const inscribirseBtn = document.querySelector(".btn-inscribirse:not(.disabled)");
+  const modal = document.getElementById("confirmModal");
+  const confirmBtn = document.getElementById("confirmBtn");
+  const cancelBtn = document.getElementById("cancelBtn");
+
+  if (inscribirseBtn) {
+    inscribirseBtn.addEventListener("click", function(event) {
+      event.preventDefault(); // Evita la redirección inmediata
+      modal.style.display = "block";
+    });
+  }
+
+  confirmBtn.addEventListener("click", function() {
+    window.location.href = inscribirseBtn.getAttribute("href");
+  });
+
+  cancelBtn.addEventListener("click", function() {
+    modal.style.display = "none";
+  });
+
+  // Cierra si se hace clic fuera del modal
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+});
+</script>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -62,5 +94,18 @@
                 </c:if>
             </div>
         </div>
+                
+        <!-- Modal de confirmación -->
+            <div id="confirmModal" class="modal">
+                <div class="modal-content"> <br>
+                    <h2>Confirmar inscripción</h2> <br>
+                    <p>¿Estás seguro/a de que deseas</p>
+                    <p>inscribirte en esta actividad?</p> <br>
+                    <div class="modal-buttons">
+                        <button id="confirmBtn">Confirmar</button>
+                        <button id="cancelBtn">Cancelar</button>
+                    </div>
+                </div>
+            </div>        
     </body>
 </html>

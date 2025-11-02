@@ -52,7 +52,10 @@ public class ActividadDAO {
     
     public List<Actividad> listar() {
         String sql = "SELECT idActividad, nombreActividad, descripcion, fechaActividad, "
-                + "ubicacion, horasDadas, cuposDisponibles, idAdmin, imagen FROM Actividad";        
+           + "ubicacion, horasDadas, cuposDisponibles, idAdmin, imagen "
+           + "FROM Actividad "
+           + "ORDER BY fechaActividad ASC";
+        // Ordena del más viejo al más reciente (ASC), pero puede ser con el más reciente primero (DESC)
         
         List<Actividad> listaActividad = new ArrayList<>();
         try {
