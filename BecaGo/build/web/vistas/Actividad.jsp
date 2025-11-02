@@ -6,6 +6,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -93,9 +94,9 @@
                         <td>${actividad.getIdActividad()}</td>
                         <td>${actividad.getNombreActividad()}</td>
                         <td>${actividad.getDescripcion()}</td>
-                        <td>${actividad.getFechaActividad()}</td>
+                        <td><fmt:formatDate value="${actividad.getFechaActividad()}" pattern="dd/MM/yy hh:mm a" /></td>
                         <td>${actividad.getUbicacion()}</td>
-                        <td>${actividad.getHorasDadas()}</td>
+                        <td><fmt:formatNumber value="${actividad.getHorasDadas()}" maxFractionDigits="0" /></td>
                         <td>${actividad.getCuposDisponibles()}</td>
                         <td>${actividad.getIdAdmin()}</td>                        
                         <td>

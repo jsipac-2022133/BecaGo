@@ -6,6 +6,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -36,9 +37,9 @@
             <div class="card-info">
                 <input type="hidden" name="idActividad" value="${actividadIndividual.getIdActividad()}"/>                
                 <h1>📌${actividadIndividual.getNombreActividad()}</h1>
-                <h3>📅 <b>Fecha y Hora: </b>${actividadIndividual.getFechaActividad()}</h3>
+                <h3>📅 <b>Fecha y Hora: </b><fmt:formatDate value="${actividadIndividual.getFechaActividad()}" pattern="dd/MM/yy hh:mm a" /></h3>
                 <h3>📍 <b>Ubicación: </b>${actividadIndividual.getUbicacion()}</h3>
-                <h3>⏱ <b>Horas Dadas: </b>${actividadIndividual.getHorasDadas()}</h3>
+                <h3>⏱ <b>Horas Dadas: </b><fmt:formatNumber value="${actividadIndividual.getHorasDadas()}" maxFractionDigits="0" /></h3>
                 <h3>👥 <b>Cupos Disponibles: </b>${actividadIndividual.getCuposDisponibles()}</h3>   
                 
                 <div class="btn-container">

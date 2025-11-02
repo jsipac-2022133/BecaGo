@@ -59,8 +59,16 @@
             <td>${inscripcion.correoEstudiante}</td>
             <td>
                 <c:choose>
-                    <c:when test="${inscripcion.estado}">Cumplido</c:when>
-                    <c:otherwise>Pendiente</c:otherwise>
+                    <c:when test="${inscripcion.estado}">
+                        Cumplido
+                    </c:when>
+                    <c:otherwise>
+                        Pendiente
+                        <form action="Controlador?menu=Horas" method="POST" style="display:inline;">
+                            <input type="hidden" name="txtIdInscripcion" value="${inscripcion.idInscripcion}">
+                            <button type="submit" name="accion" value="Agregar">Actividad Cumplida</button>
+                        </form>
+                    </c:otherwise>
                 </c:choose>
             </td>
         </tr>

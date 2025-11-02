@@ -70,7 +70,7 @@ public class InscripcionDAO {
         List<ActividadEstudianteDTO> lista = new ArrayList<>();
 
         String sql = "SELECT a.nombreActividad, e.nombreEstudiante, e.apellidoEstudiante, "
-                + "e.correoEstudiante, i.estado, a.cuposDisponibles, a.fechaActividad  " +
+                + "e.correoEstudiante, i.estado, a.cuposDisponibles, a.fechaActividad, i.idInscripcion  " +
              "FROM Actividad AS a " +
              "INNER JOIN Inscripcion AS i ON i.idActividad = a.idActividad " +
              "INNER JOIN Estudiante AS e ON i.idEstudiante = e.idEstudiante " +
@@ -89,6 +89,7 @@ public class InscripcionDAO {
                 dto.setEstado(rs.getBoolean("estado"));
                 dto.setCuposDisponibles(rs.getInt("cuposDisponibles"));
                 dto.setFechaActividad(rs.getTimestamp("fechaActividad"));
+                dto.setIdInscripcion((rs.getInt("idInscripcion")));
                 lista.add(dto);
             }
         } catch (Exception e) {
@@ -97,4 +98,17 @@ public class InscripcionDAO {
         return lista;
     }
 
+    public int AgregarHorasAEstudiante(int idInscripcion){
+        String sql="update Inscripcion set estado=true where idInscripcion=?";
+        
+        try {
+            con=cn.Conexion();
+            ps=con.prepareStatement(sql);
+            ps.setInt(1, idInscripcion);
+            resp=ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resp;
+    }
 }

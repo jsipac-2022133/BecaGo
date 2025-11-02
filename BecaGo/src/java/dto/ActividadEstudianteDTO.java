@@ -19,11 +19,12 @@ public class ActividadEstudianteDTO {
     private boolean estado;
     private int cuposDisponibles;
     private Timestamp fechaActividad;
+    private int idInscripcion;
 
     public ActividadEstudianteDTO() {
     }
 
-    public ActividadEstudianteDTO(String nombreActividad, String nombreEstudiante, String apellidoEstudiante, String correoEstudiante, boolean estado, int cuposDisponibles, Timestamp fechaActividad) {
+    public ActividadEstudianteDTO(String nombreActividad, String nombreEstudiante, String apellidoEstudiante, String correoEstudiante, boolean estado, int cuposDisponibles, Timestamp fechaActividad, int idInscripcion) {
         this.nombreActividad = nombreActividad;
         this.nombreEstudiante = nombreEstudiante;
         this.apellidoEstudiante = apellidoEstudiante;
@@ -31,9 +32,8 @@ public class ActividadEstudianteDTO {
         this.estado = estado;
         this.cuposDisponibles = cuposDisponibles;
         this.fechaActividad = fechaActividad;
-    }
-
-    
+        this.idInscripcion = idInscripcion;
+    }       
 
     public String getNombreActividad() {
         return nombreActividad;
@@ -89,6 +89,14 @@ public class ActividadEstudianteDTO {
 
     public void setFechaActividad(Timestamp fechaActividad) {
         this.fechaActividad = fechaActividad;
+    }
+
+    public int getIdInscripcion() {
+        return idInscripcion;
+    }
+
+    public void setIdInscripcion(int idInscripcion) {
+        this.idInscripcion = idInscripcion;
     }
 
     
