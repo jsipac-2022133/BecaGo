@@ -101,7 +101,7 @@ inner join Estudiante as e
 on i.idEstudiante=e.idEstudiante
 */
 
-/*update Inscripcion set estado=false where idInscripcion=2*/
+/*update Inscripcion set estado=true where idInscripcion=2*/
 
 
 

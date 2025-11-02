@@ -6,6 +6,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -27,7 +28,10 @@
             <c:forEach var="inscripcion" items="${inscripcionesIndividuales}">
                 <div style="border: 1px solid #333;">
                     <h1>${inscripcion.getNombreActividad()}</h1>
-                    <h3><b>Fecha: </b>${inscripcion.getFechaActividad()}</h3>
+                    <h3>
+                       <b>Fecha:</b> <fmt:formatDate value="${inscripcion.getFechaActividad()}" pattern="dd/MM/yy" /><br>
+                       <b>Hora:</b> <fmt:formatDate value="${inscripcion.getFechaActividad()}" pattern="hh:mm a" />
+                    </h3>
                     <h3><b>Ubicación: </b>${inscripcion.getUbicacion()}</h3>
                 </div>
             </c:forEach>
