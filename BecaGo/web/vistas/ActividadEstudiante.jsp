@@ -6,6 +6,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -30,7 +31,7 @@
                 <a href="Controlador?menu=InformacionActividad&accion=Info%20Individual&idActividad=${actividad.getIdActividad()}">
                     <div style="border: 1px solid #333;">
                         <h2>📌 ${actividad.getNombreActividad()}</h2>
-                        <h3>${actividad.getFechaActividad()}</h3>
+                        <h3><fmt:formatDate value="${actividad.getFechaActividad()}" pattern="dd/MM/yy hh:mm a" /></h3>
                         <c:if test="${actividad.getImagen() != null}">
                             <img src="Controlador?menu=Actividad&accion=VerImagen&idActividad=${actividad.getIdActividad()}" 
                                  width="50" height="50" alt="Imagen actividad">
