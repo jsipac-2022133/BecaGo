@@ -20,7 +20,7 @@
                 <li><a href="Controlador?menu=Actividades%20Estudiante&accion=Listar">Actividades</a></li>
                 <li><a href="Controlador?menu=Inscripciones%20Estudiante&accion=Listar">Inscripciones</a></li>
                 <li><a href="#">Resumen</a></li>
-                <li><a href="#">Logout</a></li>
+                <li><a href="Controlador?menu=Logout">Logout</a></li>
             </ul>
         </nav>
 

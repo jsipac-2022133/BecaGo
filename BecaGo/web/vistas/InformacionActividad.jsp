@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <li><a href="Controlador?menu=Actividades%20Estudiante&accion=Listar">Actividades</a></li>
                 <li><a href="#">Inscripciones</a></li>
                 <li><a href="#">Resumen</a></li>
-                <li><a href="#">Logout</a></li>
+                <li><a href="Controlador?menu=Logout">Logout</a></li>
             </ul>
         </nav>
 

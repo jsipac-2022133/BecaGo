@@ -487,6 +487,17 @@ public class Controlador extends HttpServlet {
                 request.getRequestDispatcher("vistas/PerfilUsuario.jsp").forward(request, response);
             }
         }
+        else if (menu.equals("Logout")) {
+    // invalida la sesión
+    HttpSession session = request.getSession(false);
+    if (session != null) {
+        session.invalidate();
+    }
+    
+    // regresa al login
+    response.sendRedirect("Controlador?menu=Login");
+    return;
+}
     }
 
     @Override
