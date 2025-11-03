@@ -23,7 +23,7 @@
             </ul>
         </nav>
 
-        <h1>Resumen de Actividades Completadas</h1>
+        <h1>Actividades Completadas</h1>
 
         <div>
             <table>
@@ -44,7 +44,10 @@
                     </c:forEach>
                 </tbody>
             </table>
-            <h3>Horas cumplidas: ${totalHoras}</h3>
+            <h2>Resumen</h2>
+            <h3>Horas Requeridas: ${horasRequeridas}</h3>
+            <h3>Horas Cumplidas: ${horasCumplidas}</h3>
+            <h3 style="color: red">Horas Pendientes: ${horasRequeridas-horasCumplidas}</h3>
 
         </div>
     </body>

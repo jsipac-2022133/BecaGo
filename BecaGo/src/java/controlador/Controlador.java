@@ -355,14 +355,16 @@ public class Controlador extends HttpServlet {
                 int idEstudiante = estudianteEnSesion.getIdEstudiante();
                 List<ActividadEstudianteDTO> lista = inscripcionDAO.listarActividadesCompletadas(idEstudiante);
                 request.setAttribute("listaResumen", lista);
-
+                
+                int horasRequeridas=estudianteEnSesion.getHorasAsignadas();
+                request.setAttribute("horasRequeridas", horasRequeridas);
                 int totalHoras = 0;
                 for (ActividadEstudianteDTO a : lista) {
                     totalHoras += a.getHorasDadas();
                 }
                 
                 estudianteDAO.actualizarHorasCumplidas(totalHoras, idEstudiante);
-                request.setAttribute("totalHoras", totalHoras);
+                request.setAttribute("horasCumplidas", totalHoras);
                 request.getRequestDispatcher("vistas/Resumen.jsp").forward(request, response);
             }
         } else if (menu.equals("Perfil")) {
