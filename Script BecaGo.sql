@@ -103,6 +103,13 @@ on i.idEstudiante=e.idEstudiante
 
 /*update Inscripcion set estado=true where idInscripcion=2*/
 
+/*select a.nombreActividad, a.fechaActividad, a.horasDadas
+from Actividad as a
+inner join Inscripcion as i
+on a.idActividad=i.idActividad
+inner join Estudiante as e
+on e.idEstudiante=i.idEstudiante
+where i.idEstudiante=1 and estado=1*/
 
 
 
