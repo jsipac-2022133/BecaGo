@@ -16,20 +16,21 @@ import modelo.Estudiante;
  * @author SIPAC
  */
 public class EstudianteDAO {
-    Conexion cn=new Conexion();
+
+    Conexion cn = new Conexion();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
     int resp;
-    
-    public int Agregar(Estudiante estudiante){
-        String sql="insert into Estudiante(nombreEstudiante, "
+
+    public int Agregar(Estudiante estudiante) {
+        String sql = "insert into Estudiante(nombreEstudiante, "
                 + "apellidoEstudiante, telefono, correoEstudiante, "
                 + "passwordEstudiante, carrera, horasAsignadas) values(?,?,?,?,?,?,?)";
-        
+
         try {
-            con=cn.Conexion();
-            ps=con.prepareStatement(sql);
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
             ps.setString(1, estudiante.getNombreEstudiante());
             ps.setString(2, estudiante.getApellidoEstudiante());
             ps.setString(3, estudiante.getTelefono());
@@ -37,23 +38,23 @@ public class EstudianteDAO {
             ps.setString(5, estudiante.getPasswordEstudiante());
             ps.setString(6, estudiante.getCarrera());
             ps.setInt(7, estudiante.getHorasAsignadas());
-            resp=ps.executeUpdate();
+            resp = ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return resp;
     }
-    
-    public Estudiante validar(String correo, String password){
-        Estudiante estudiante=new Estudiante();
-        String sql="select * from Estudiante where correoEstudiante=? and passwordEstudiante=?";
+
+    public Estudiante validar(String correo, String password) {
+        Estudiante estudiante = new Estudiante();
+        String sql = "select * from Estudiante where correoEstudiante=? and passwordEstudiante=?";
         try {
-            con=cn.Conexion();
-            ps=con.prepareStatement(sql);
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
             ps.setString(1, correo);
             ps.setString(2, password);
-            rs=ps.executeQuery();
-            while(rs.next()){
+            rs = ps.executeQuery();
+            while (rs.next()) {
                 estudiante.setIdEstudiante(rs.getInt("idEstudiante"));
                 estudiante.setNombreEstudiante(rs.getString("nombreEstudiante"));
                 estudiante.setApellidoEstudiante(rs.getString("apellidoEstudiante"));
@@ -69,7 +70,7 @@ public class EstudianteDAO {
         }
         return estudiante;
     }
-    
+
     public boolean existeCorreo(String correo) {
         String sql = "SELECT COUNT(*) FROM Estudiante WHERE correoEstudiante = ?";
         try {
@@ -101,29 +102,44 @@ public class EstudianteDAO {
         }
         return false;
     }
-    
+
     public int actualizar(Estudiante estudiante) {
-    String sql = "UPDATE Estudiante SET nombreEstudiante=?, apellidoEstudiante=?, telefono=?, "
-               + "correoEstudiante=?, passwordEstudiante=?, carrera=?, horasAsignadas=?, horasCumplidas=? "
-               + "WHERE idEstudiante=?";
-    
-    try {
-        con = cn.Conexion();
-        ps = con.prepareStatement(sql);
-        ps.setString(1, estudiante.getNombreEstudiante());
-        ps.setString(2, estudiante.getApellidoEstudiante());
-        ps.setString(3, estudiante.getTelefono());
-        ps.setString(4, estudiante.getCorreoEstudiante());
-        ps.setString(5, estudiante.getPasswordEstudiante());
-        ps.setString(6, estudiante.getCarrera());
-        ps.setInt(7, estudiante.getHorasAsignadas());
-        ps.setInt(8, estudiante.getHorasCumplidas());
-        ps.setInt(9, estudiante.getIdEstudiante());
-        resp = ps.executeUpdate();
-    } catch (Exception e) {
-        e.printStackTrace();
+        String sql = "UPDATE Estudiante SET nombreEstudiante=?, apellidoEstudiante=?, telefono=?, "
+                + "correoEstudiante=?, passwordEstudiante=?, carrera=?, horasAsignadas=?, horasCumplidas=? "
+                + "WHERE idEstudiante=?";
+
+        try {
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, estudiante.getNombreEstudiante());
+            ps.setString(2, estudiante.getApellidoEstudiante());
+            ps.setString(3, estudiante.getTelefono());
+            ps.setString(4, estudiante.getCorreoEstudiante());
+            ps.setString(5, estudiante.getPasswordEstudiante());
+            ps.setString(6, estudiante.getCarrera());
+            ps.setInt(7, estudiante.getHorasAsignadas());
+            ps.setInt(8, estudiante.getHorasCumplidas());
+            ps.setInt(9, estudiante.getIdEstudiante());
+            resp = ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resp;
     }
-    return resp;
-}
     
+    public int actualizarHorasCumplidas(int horasCumplidas, int idEstudiante){
+        String sql="update Estudiante set horasCumplidas=? where idEstudiante=?";
+        
+        try {
+            con=cn.Conexion();
+            ps=con.prepareStatement(sql);
+            ps.setInt(1, horasCumplidas);
+            ps.setInt(2, idEstudiante);
+            resp=ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resp;
+    }
+
 }

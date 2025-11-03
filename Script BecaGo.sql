@@ -111,7 +111,7 @@ inner join Estudiante as e
 on e.idEstudiante=i.idEstudiante
 where i.idEstudiante=1 and estado=1*/
 
-
+/*update Estudiante set horasCumplidas=0 where idEstudiante=2*/
 
 
 

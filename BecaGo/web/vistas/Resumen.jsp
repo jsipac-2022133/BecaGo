@@ -5,7 +5,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,7 +22,9 @@
                 <li><a href="#">Logout</a></li>
             </ul>
         </nav>
+
         <h1>Resumen de Actividades Completadas</h1>
+
         <div>
             <table>
                 <thead>
@@ -33,15 +35,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="resumen" items="${listaResumen}">
-                    <tr>
-                        <td>${resumen.getNombreActividad()}</td>
-                        <td>${resumen.getFechaActividad()}</td>
-                        <td>${resumen.getHorasDadas()}</td>
-                    </tr>
-                </c:forEach>                    
+                    <c:forEach var="resumen" items="${listaResumen}">
+                        <tr>
+                            <td>${resumen.getNombreActividad()}</td>
+                            <td>${resumen.getFechaActividad()}</td>
+                            <td>${resumen.getHorasDadas()}</td>
+                        </tr>
+                    </c:forEach>
                 </tbody>
             </table>
+            <h3>Horas cumplidas: ${totalHoras}</h3>
 
         </div>
     </body>
