@@ -165,11 +165,13 @@ public class ActividadDAO {
     }
     
     public List<Actividad> listarPorInscripcionIndividual(int idEstudiante) {
-        String sql = "select a.nombreActividad, a.fechaActividad, a.ubicacion \n"
-                + "from Actividad as a \n"
-                + "inner join Inscripcion as i\n"
-                + "on i.idActividad=a.idActividad\n"
-                + "where i.idEstudiante=?";
+        String sql = "SELECT a.nombreActividad, a.fechaActividad, a.ubicacion "
+            + "FROM Actividad AS a "
+            + "INNER JOIN Inscripcion AS i "
+            + "ON i.idActividad = a.idActividad "
+            + "WHERE i.idEstudiante = ? "
+            + "ORDER BY a.fechaActividad ASC";
+            // Ordena del más viejo al más reciente (ASC), pero puede ser con el más reciente primero (DESC)
         
         List<Actividad> listaActividad=new ArrayList<>();
         

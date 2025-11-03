@@ -65,7 +65,7 @@ public class InscripcionDAO {
         return inscrito;
     }
 
-    //este método incorpora atributos de 3 entidades (no tocar)
+    // Este método incorpora atributos de 3 entidades (NO TOCAR)
     public List<ActividadEstudianteDTO> listarPorInscripcionColectivo() {
         List<ActividadEstudianteDTO> lista = new ArrayList<>();
 
