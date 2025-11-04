@@ -316,178 +316,189 @@ public class Controlador extends HttpServlet {
                 request.getRequestDispatcher("vistas/InformacionActividad.jsp").forward(request, response);
             }
         } else if (menu.equals("Inscripcion")) {
-            if (accion.equals("Agregar")) {
-                idActividad = Integer.parseInt(request.getParameter("idActividad"));
-                int idEstudiante = estudianteEnSesion.getIdEstudiante();
-                Timestamp fechaInscripcion = Timestamp.valueOf(LocalDateTime.now());
-                inscripcion.setIdActividad(idActividad);
-                inscripcion.setIdEstudiante(idEstudiante);
-                inscripcion.setFechaInscripcion(fechaInscripcion);
-                inscripcionDAO.Agregar(inscripcion);
-                //actualizar cupoooo
-                ActividadDAO actividadCupo = new ActividadDAO();
-                Actividad actividad = actividadCupo.buscarActividad(idActividad);
-                int nuevoCupo = actividad.getCuposDisponibles() - 1;
-                actividadCupo.reducirCupo(actividad, nuevoCupo, idActividad);
+    if (accion.equals("Agregar")) {
+        idActividad = Integer.parseInt(request.getParameter("idActividad"));
+        int idEstudiante = estudianteEnSesion.getIdEstudiante();
+        Timestamp fechaInscripcion = Timestamp.valueOf(LocalDateTime.now());
+        inscripcion.setIdActividad(idActividad);
+        inscripcion.setIdEstudiante(idEstudiante);
+        inscripcion.setFechaInscripcion(fechaInscripcion);
+        inscripcionDAO.Agregar(inscripcion);
+        //actualizar cupoooo
+        ActividadDAO actividadCupo = new ActividadDAO();
+        Actividad actividad = actividadCupo.buscarActividad(idActividad);
+        int nuevoCupo = actividad.getCuposDisponibles() - 1;
+        actividadCupo.reducirCupo(actividad, nuevoCupo, idActividad);
 
-                request.getRequestDispatcher("Controlador?menu=InformacionActividad&accion=Info%20Individual&idActividad=" + idActividad)
-                        .forward(request, response);
-            } else if (accion.equals("Listar")) {
-                List<ActividadEstudianteDTO> lista = inscripcionDAO.listarPorInscripcionColectivo();
-                request.setAttribute("inscripcionesColectivas", lista);
-                request.getRequestDispatcher("vistas/Inscripcion.jsp").forward(request, response);
-            }
-        } else if (menu.equals("Inscripciones Estudiante")) {
-            if (accion.equals("Listar")) {
-                int idEstudiante = estudianteEnSesion.getIdEstudiante();
-                List<Actividad> listaActividad = actividadDAO.listarPorInscripcionIndividual(idEstudiante);
-                request.setAttribute("inscripcionesIndividuales", listaActividad);
-                request.getRequestDispatcher("vistas/InscripcionEstudiante.jsp").forward(request, response);
-            }
-        } else if (menu.equals("Horas")) {
-            if (accion.equals("Agregar")) {
-                int idInscripcion = Integer.parseInt(request.getParameter("txtIdInscripcion"));
-                inscripcionDAO.AgregarHorasAEstudiante(idInscripcion);
-                response.sendRedirect("Controlador?menu=Inscripcion&accion=Listar");
-            }
-        } else if (menu.equals("Resumen")) {
-            if (accion.equals("Listar")) {
-                int idEstudiante = estudianteEnSesion.getIdEstudiante();
-                List<ActividadEstudianteDTO> lista = inscripcionDAO.listarActividadesCompletadas(idEstudiante);
-                request.setAttribute("listaResumen", lista);
-                
-                int horasRequeridas=estudianteEnSesion.getHorasAsignadas();
-                request.setAttribute("horasRequeridas", horasRequeridas);
-                int totalHoras = 0;
-                for (ActividadEstudianteDTO a : lista) {
-                    totalHoras += a.getHorasDadas();
+        request.getRequestDispatcher("Controlador?menu=InformacionActividad&accion=Info%20Individual&idActividad=" + idActividad)
+                .forward(request, response);
+    } else if (accion.equals("Listar")) {
+        List<ActividadEstudianteDTO> lista = inscripcionDAO.listarPorInscripcionColectivo();
+        request.setAttribute("inscripcionesColectivas", lista);
+        request.getRequestDispatcher("vistas/Inscripcion.jsp").forward(request, response);
+    } else if (accion.equals("CompletarActividad")) {
+        int idInscripcion = Integer.parseInt(request.getParameter("idInscripcion"));
+        int idEstudiante = Integer.parseInt(request.getParameter("idEstudiante"));
+        double horasDadas = Double.parseDouble(request.getParameter("horasDadas"));
+        
+        // marca completo y suma horas
+        inscripcionDAO.AgregarHorasAEstudiante(idInscripcion, idEstudiante, horasDadas);
+        
+        // Recargar la lista
+        List<ActividadEstudianteDTO> lista = inscripcionDAO.listarPorInscripcionColectivo();
+        request.setAttribute("inscripcionesColectivas", lista);
+        request.getRequestDispatcher("vistas/Inscripcion.jsp").forward(request, response);
+    }
+} else if (menu.equals("Inscripciones Estudiante")) {
+    if (accion.equals("Listar")) {
+        int idEstudiante = estudianteEnSesion.getIdEstudiante();
+        List<Actividad> listaActividad = actividadDAO.listarPorInscripcionIndividual(idEstudiante);
+        request.setAttribute("inscripcionesIndividuales", listaActividad);
+        request.getRequestDispatcher("vistas/InscripcionEstudiante.jsp").forward(request, response);
+    }
+} else if (menu.equals("Horas")) {
+    if (accion.equals("Agregar")) {
+        int idInscripcion = Integer.parseInt(request.getParameter("txtIdInscripcion"));
+        // obtener mas datos para sumar las horas
+        // se supone que esto debería redirigir a CompletarActividad o eliminarse si ya no se usa
+        response.sendRedirect("Controlador?menu=Inscripcion&accion=Listar");
+    }
+} else if (menu.equals("Resumen")) {
+    if (accion.equals("Listar")) {
+        int idEstudiante = estudianteEnSesion.getIdEstudiante();
+        List<ActividadEstudianteDTO> lista = inscripcionDAO.listarActividadesCompletadas(idEstudiante);
+        request.setAttribute("listaResumen", lista);
+        
+        int horasRequeridas = estudianteEnSesion.getHorasAsignadas();
+        request.setAttribute("horasRequeridas", horasRequeridas);
+        
+        int totalHoras = 0;
+        for (ActividadEstudianteDTO a : lista) {
+            totalHoras += a.getHorasDadas();
+        }
+        request.setAttribute("totalHoras", totalHoras);
+        
+        request.getRequestDispatcher("vistas/Resumen.jsp").forward(request, response);
+    }
+} else if (menu.equals("Perfil")) {
+    if (accion.equals("Mostrar")) {
+        // esto muestra el formulario del perfil
+        request.getRequestDispatcher("vistas/PerfilUsuario.jsp").forward(request, response);
+
+    } else if (accion.equals("Actualizar")) {
+        java.util.ArrayList<String> errores = new java.util.ArrayList<>();
+        String mensajeExito = null;
+
+        String nombre = request.getParameter("txtNombre");
+        String apellido = request.getParameter("txtApellido");
+        String telefono = request.getParameter("txtTelefono");
+        String correo = request.getParameter("txtCorreo");
+        String passwordActual = request.getParameter("txtPasswordActual");
+        String nuevaPassword = request.getParameter("txtNuevaPassword");
+        String confirmarPassword = request.getParameter("txtConfirmarPassword");
+
+        // para validar la contraseña 
+        if (passwordActual == null || passwordActual.trim().isEmpty()) {
+            errores.add("La contraseña actual es requerida para confirmar cambios");
+        } else {
+            if (estudianteEnSesion != null) {
+                if (!estudianteEnSesion.getPasswordEstudiante().equals(passwordActual)) {
+                    errores.add("La contraseña actual es incorrecta");
                 }
-                
-                estudianteDAO.actualizarHorasCumplidas(totalHoras, idEstudiante);
-                request.setAttribute("horasCumplidas", totalHoras);
-                request.getRequestDispatcher("vistas/Resumen.jsp").forward(request, response);
-            }
-        } else if (menu.equals("Perfil")) {
-            if (accion.equals("Mostrar")) {
-                // esto muestra el formulario del perfil
-                request.getRequestDispatcher("vistas/PerfilUsuario.jsp").forward(request, response);
-
-            } else if (accion.equals("Actualizar")) {
-                java.util.ArrayList<String> errores = new java.util.ArrayList<>();
-                String mensajeExito = null;
-
-                String nombre = request.getParameter("txtNombre");
-                String apellido = request.getParameter("txtApellido");
-                String telefono = request.getParameter("txtTelefono");
-                String correo = request.getParameter("txtCorreo");
-                String passwordActual = request.getParameter("txtPasswordActual");
-                String nuevaPassword = request.getParameter("txtNuevaPassword");
-                String confirmarPassword = request.getParameter("txtConfirmarPassword");
-
-                // para validar la contraseña 
-                if (passwordActual == null || passwordActual.trim().isEmpty()) {
-                    errores.add("La contraseña actual es requerida para confirmar cambios");
-                } else {
-                    if (estudianteEnSesion != null) {
-                        if (!estudianteEnSesion.getPasswordEstudiante().equals(passwordActual)) {
-                            errores.add("La contraseña actual es incorrecta");
-                        }
-                    } else if (adminEnSesion != null) {
-                        if (!adminEnSesion.getPasswordAdmin().equals(passwordActual)) {
-                            errores.add("La contraseña actual es incorrecta");
-                        }
-                    }
+            } else if (adminEnSesion != null) {
+                if (!adminEnSesion.getPasswordAdmin().equals(passwordActual)) {
+                    errores.add("La contraseña actual es incorrecta");
                 }
-
-                // valida la nueva contra si el usuario si la actualiza 
-                if (nuevaPassword != null && !nuevaPassword.trim().isEmpty()) {
-                    if (!nuevaPassword.equals(confirmarPassword)) {
-                        errores.add("Las nuevas contraseñas no coinciden");
-                    }
-                    if (nuevaPassword.length() < 6) {
-                        errores.add("La nueva contraseña debe tener al menos 6 caracteres");
-                    }
-                }
-
-                if (estudianteEnSesion != null) {
-                    if (!correo.equals(estudianteEnSesion.getCorreoEstudiante())
-                            && (estudianteDAO.existeCorreo(correo) || administradorDAO.existeCorreo(correo))) {
-                        errores.add("El correo ya está registrado");
-                    }
-                    if (!telefono.equals(estudianteEnSesion.getTelefono())
-                            && (estudianteDAO.existeTel(telefono) || administradorDAO.existeTel(telefono))) {
-                        errores.add("El teléfono ya está registrado");
-                    }
-                } else if (adminEnSesion != null) {
-                    if (!correo.equals(adminEnSesion.getCorreoAdmin())
-                            && (administradorDAO.existeCorreo(correo) || estudianteDAO.existeCorreo(correo))) {
-                        errores.add("El correo ya está registrado");
-                    }
-                    if (!telefono.equals(adminEnSesion.getTelefono())
-                            && (administradorDAO.existeTel(telefono) || estudianteDAO.existeTel(telefono))) {
-                        errores.add("El teléfono ya está registrado");
-                    }
-                }
-
-                if (errores.isEmpty()) {
-                    // actualiza datos 
-                    if (estudianteEnSesion != null) {
-                        // actualiza al estudiante
-                        estudianteEnSesion.setNombreEstudiante(nombre);
-                        estudianteEnSesion.setApellidoEstudiante(apellido);
-                        estudianteEnSesion.setTelefono(telefono);
-                        estudianteEnSesion.setCorreoEstudiante(correo);
-                        estudianteEnSesion.setCarrera(request.getParameter("txtCarrera"));
-
-                        if (nuevaPassword != null && !nuevaPassword.trim().isEmpty()) {
-                            estudianteEnSesion.setPasswordEstudiante(nuevaPassword);
-                        }
-
-                        // lo actualiza en la bd 
-                        int resultado = estudianteDAO.actualizar(estudianteEnSesion);
-                        if (resultado > 0) {
-                            mensajeExito = "Perfil actualizado correctamente";
-
-                            sessionActiva.setAttribute("estudianteEnSesion", estudianteEnSesion);
-                        } else {
-                            errores.add("Error al actualizar el perfil en la base de datos");
-                        }
-
-                    } else if (adminEnSesion != null) {
-                        // actualiza el administrador
-                        adminEnSesion.setNombreAdmin(nombre);
-                        adminEnSesion.setApellidoAdmin(apellido);
-                        adminEnSesion.setTelefono(telefono);
-                        adminEnSesion.setCorreoAdmin(correo);
-                        adminEnSesion.setNombreDepartamento(request.getParameter("txtDepartamento"));
-
-                        if (nuevaPassword != null && !nuevaPassword.trim().isEmpty()) {
-                            adminEnSesion.setPasswordAdmin(nuevaPassword);
-                        }
-
-                        // actualiza en la bd 
-                        int resultado = administradorDAO.actualizar(adminEnSesion);
-                        if (resultado > 0) {
-                            mensajeExito = "Perfil actualizado correctamente";
-
-                            sessionActiva.setAttribute("administradorEnSesion", adminEnSesion);
-                        } else {
-                            errores.add("Error al actualizar el perfil en la base de datos");
-                        }
-                    }
-                }
-
-                if (!errores.isEmpty()) {
-                    request.setAttribute("errores", errores);
-                }
-                if (mensajeExito != null) {
-                    request.setAttribute("mensajeExito", mensajeExito);
-                }
-
-                request.getRequestDispatcher("vistas/PerfilUsuario.jsp").forward(request, response);
             }
         }
-        else if (menu.equals("Logout")) {
+
+        // valida la nueva contra si el usuario si la actualiza 
+        if (nuevaPassword != null && !nuevaPassword.trim().isEmpty()) {
+            if (!nuevaPassword.equals(confirmarPassword)) {
+                errores.add("Las nuevas contraseñas no coinciden");
+            }
+            if (nuevaPassword.length() < 6) {
+                errores.add("La nueva contraseña debe tener al menos 6 caracteres");
+            }
+        }
+
+        // Validar correo único
+        if (estudianteEnSesion != null) {
+            if (!correo.equals(estudianteEnSesion.getCorreoEstudiante())
+                    && (estudianteDAO.existeCorreo(correo) || administradorDAO.existeCorreo(correo))) {
+                errores.add("El correo ya está registrado");
+            }
+            if (!telefono.equals(estudianteEnSesion.getTelefono())
+                    && (estudianteDAO.existeTel(telefono) || administradorDAO.existeTel(telefono))) {
+                errores.add("El teléfono ya está registrado");
+            }
+        } else if (adminEnSesion != null) {
+            if (!correo.equals(adminEnSesion.getCorreoAdmin())
+                    && (administradorDAO.existeCorreo(correo) || estudianteDAO.existeCorreo(correo))) {
+                errores.add("El correo ya está registrado");
+            }
+            if (!telefono.equals(adminEnSesion.getTelefono())
+                    && (administradorDAO.existeTel(telefono) || estudianteDAO.existeTel(telefono))) {
+                errores.add("El teléfono ya está registrado");
+            }
+        }
+
+        if (errores.isEmpty()) {
+            // actualiza datos 
+            if (estudianteEnSesion != null) {
+                // actualiza al estudiante
+                estudianteEnSesion.setNombreEstudiante(nombre);
+                estudianteEnSesion.setApellidoEstudiante(apellido);
+                estudianteEnSesion.setTelefono(telefono);
+                estudianteEnSesion.setCorreoEstudiante(correo);
+                estudianteEnSesion.setCarrera(request.getParameter("txtCarrera"));
+
+                if (nuevaPassword != null && !nuevaPassword.trim().isEmpty()) {
+                    estudianteEnSesion.setPasswordEstudiante(nuevaPassword);
+                }
+
+                // lo actualiza en la bd 
+                int resultado = estudianteDAO.actualizar(estudianteEnSesion);
+                if (resultado > 0) {
+                    mensajeExito = "Perfil actualizado correctamente";
+                    sessionActiva.setAttribute("estudianteEnSesion", estudianteEnSesion);
+                } else {
+                    errores.add("Error al actualizar el perfil en la base de datos");
+                }
+
+            } else if (adminEnSesion != null) {
+                // actualiza el administrador
+                adminEnSesion.setNombreAdmin(nombre);
+                adminEnSesion.setApellidoAdmin(apellido);
+                adminEnSesion.setTelefono(telefono);
+                adminEnSesion.setCorreoAdmin(correo);
+                adminEnSesion.setNombreDepartamento(request.getParameter("txtDepartamento"));
+
+                if (nuevaPassword != null && !nuevaPassword.trim().isEmpty()) {
+                    adminEnSesion.setPasswordAdmin(nuevaPassword);
+                }
+
+                // actualiza en la bd 
+                int resultado = administradorDAO.actualizar(adminEnSesion);
+                if (resultado > 0) {
+                    mensajeExito = "Perfil actualizado correctamente";
+                    sessionActiva.setAttribute("administradorEnSesion", adminEnSesion);
+                } else {
+                    errores.add("Error al actualizar el perfil en la base de datos");
+                }
+            }
+        }
+
+        if (!errores.isEmpty()) {
+            request.setAttribute("errores", errores);
+        }
+        if (mensajeExito != null) {
+            request.setAttribute("mensajeExito", mensajeExito);
+        }
+
+        request.getRequestDispatcher("vistas/PerfilUsuario.jsp").forward(request, response);
+    }
+} else if (menu.equals("Logout")) {
     // invalida la sesión
     HttpSession session = request.getSession(false);
     if (session != null) {

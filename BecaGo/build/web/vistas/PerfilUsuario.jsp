@@ -112,17 +112,25 @@
                         </div>
                         
                         <div class="info-group">
-                            <label>Progreso</label>
-                            <div class="progress-bar">
-                                <%
-                                    int horasAsignadas = estudianteEnSesion.getHorasAsignadas();
-                                    int horasCumplidas = estudianteEnSesion.getHorasCumplidas();
-                                    int porcentaje = horasAsignadas > 0 ? (horasCumplidas * 100) / horasAsignadas : 0;
-                                %>
-                                <div class="progress-fill" style="width: <%= porcentaje %>%;"></div>
-                                <span class="progress-text"><%= porcentaje %>%</span>
-                            </div>
-                        </div>
+                             <label>Progreso</label>
+                             <div class="progress-bar">
+                          <%
+                                 int horasAsignadas = estudianteEnSesion.getHorasAsignadas();
+                                     int horasCumplidas = estudianteEnSesion.getHorasCumplidas();
+                                          double porcentaje = 0;
+                              if (horasAsignadas > 0) {
+                                porcentaje = (double) horasCumplidas / horasAsignadas * 100;
+                            // Limitar el porcentaje máximo a 100%
+                              if (porcentaje > 100) porcentaje = 100;
+                       }
+                           %>
+                          <div class="progress-fill" style="width: <%= porcentaje %>%;"></div>
+                          <span class="progress-text">
+                           <%= String.format("%.1f", porcentaje) %>% 
+               (<%= horasCumplidas %>/<%= horasAsignadas %> horas)
+        </span>
+    </div>
+</div>
                         
                     <% } else { %>
                         <div class="form-group">

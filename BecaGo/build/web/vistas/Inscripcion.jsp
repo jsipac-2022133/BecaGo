@@ -62,19 +62,23 @@
                 <td>${inscripcion.nombreEstudiante} ${inscripcion.apellidoEstudiante}</td>
                 <td>${inscripcion.correoEstudiante}</td>
                 <td>
-                    <c:choose>
-                        <c:when test="${inscripcion.estado}">
-                            Cumplido
-                        </c:when>
-                        <c:otherwise>
-                            Pendiente
-                            <form action="Controlador?menu=Horas" method="POST" style="display:inline;">
-                                <input type="hidden" name="txtIdInscripcion" value="${inscripcion.idInscripcion}">
-                                <button type="submit" name="accion" value="Agregar">Actividad Cumplida</button>
-                            </form>
-                        </c:otherwise>
-                    </c:choose>
-                </td>
+            <c:choose>
+                 <c:when test="${inscripcion.estado}">
+                    <span style="color: green; font-weight: bold;">✅ Cumplido</span>
+            </c:when>
+                <c:otherwise>
+                    <span style="color: orange; font-weight: bold;">⏳ Pendiente</span>
+            <form action="Controlador" method="POST" style="display:inline;">
+                <input type="hidden" name="menu" value="Inscripcion">
+                <input type="hidden" name="accion" value="CompletarActividad">
+                <input type="hidden" name="idInscripcion" value="${inscripcion.idInscripcion}">
+                <input type="hidden" name="idEstudiante" value="${inscripcion.idEstudiante}">
+                <input type="hidden" name="horasDadas" value="${inscripcion.horasDadas}">
+                <button type="submit" class="btn-completar">✅ Marcar como Cumplida</button>
+            </form>
+                </c:otherwise>
+            </c:choose>
+</td>
             </tr>
 
             <c:set var="ultimaActividad" value="${inscripcion.nombreActividad}" />

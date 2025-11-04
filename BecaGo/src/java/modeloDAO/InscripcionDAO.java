@@ -70,7 +70,7 @@ public class InscripcionDAO {
         List<ActividadEstudianteDTO> lista = new ArrayList<>();
 
         String sql = "SELECT a.nombreActividad, e.nombreEstudiante, e.apellidoEstudiante, "
-                + "e.correoEstudiante, i.estado, a.cuposDisponibles, a.fechaActividad, i.idInscripcion  "
+                + "e.correoEstudiante, i.estado, a.cuposDisponibles, a.fechaActividad, i.idInscripcion, a.horasDadas, e.idEstudiante  "
                 + "FROM Actividad AS a "
                 + "INNER JOIN Inscripcion AS i ON i.idActividad = a.idActividad "
                 + "INNER JOIN Estudiante AS e ON i.idEstudiante = e.idEstudiante "
@@ -90,6 +90,8 @@ public class InscripcionDAO {
                 dto.setCuposDisponibles(rs.getInt("cuposDisponibles"));
                 dto.setFechaActividad(rs.getTimestamp("fechaActividad"));
                 dto.setIdInscripcion((rs.getInt("idInscripcion")));
+                dto.setHorasDadas(rs.getInt("horasDadas"));
+                dto.setIdEstudiante(rs.getInt("idEstudiante"));
                 lista.add(dto);
             }
         } catch (Exception e) {
@@ -98,19 +100,25 @@ public class InscripcionDAO {
         return lista;
     }
 
-    public int AgregarHorasAEstudiante(int idInscripcion) {
-        String sql = "update Inscripcion set estado=true where idInscripcion=?";
-
-        try {
-            con = cn.Conexion();
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, idInscripcion);
-            resp = ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
+    public int AgregarHorasAEstudiante(int idInscripcion, int idEstudiante, double horasDadas) {
+    String sql = "UPDATE Inscripcion SET estado = true WHERE idInscripcion = ?";
+    
+    try {
+        con = cn.Conexion();
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, idInscripcion);
+        resp = ps.executeUpdate();
+        
+        // Si se actualizó la inscripción, sumar las horas al estudiante
+        if (resp > 0) {
+            EstudianteDAO estudianteDAO = new EstudianteDAO();
+            estudianteDAO.actualizarHorasCumplidas(idEstudiante, horasDadas);
         }
-        return resp;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+    return resp;
+}
 
     public List<ActividadEstudianteDTO> listarActividadesCompletadas(int idEstudiante) {
         List<ActividadEstudianteDTO> lista = new ArrayList<>();

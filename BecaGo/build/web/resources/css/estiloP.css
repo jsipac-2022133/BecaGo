@@ -113,9 +113,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 .progress-bar {
     position: relative;
-    height: 30px;
+    height: 35px;
     background: #e8f5e8;
-    border-radius: 15px;
+    border-radius: 10px;
     overflow: hidden;
     margin-top: 0.5rem;
     border: 1px solid #c8e6c9;
@@ -125,7 +125,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     height: 100%;
     background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
     transition: width 0.5s ease;
-    border-radius: 15px;
+    border-radius: 10px;
+    position: relative;
 }
 
 .progress-text {
@@ -133,10 +134,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: white;
+    color: #2d5016;
     font-weight: 600;
-    font-size: 0.9rem;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    font-size: 0.8rem;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.8);
+    z-index: 2;
+    white-space: nowrap;
+}
+
+/* Para asegurar que el texto sea legible cuando el progreso es bajo */
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    z-index: 1;
 }
 
 .alert {
@@ -235,4 +250,21 @@ body {
         gap: 1rem;
         text-align: center;
     }
+}
+
+/* Colores de progreso según porcentaje */
+.progress-high {
+    background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+}
+
+.progress-medium {
+    background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+}
+
+.progress-low {
+    background: linear-gradient(135deg, #FFC107 0%, #FFA000 100%);
+}
+
+.progress-very-low {
+    background: linear-gradient(135deg, #F44336 0%, #D32F2F 100%);
 }

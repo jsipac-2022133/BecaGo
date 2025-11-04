@@ -127,19 +127,34 @@ public class EstudianteDAO {
         return resp;
     }
     
-    public int actualizarHorasCumplidas(int horasCumplidas, int idEstudiante){
-        String sql="update Estudiante set horasCumplidas=? where idEstudiante=?";
-        
+    public int actualizarHorasCumplidas(int idEstudiante, double horasASumar) {
+    String sql = "UPDATE Estudiante SET horasCumplidas = horasCumplidas + ? WHERE idEstudiante = ?";
+    
         try {
-            con=cn.Conexion();
-            ps=con.prepareStatement(sql);
-            ps.setInt(1, horasCumplidas);
+            con = cn.Conexion();
+            ps = con.prepareStatement(sql);
+            ps.setDouble(1, horasASumar);
             ps.setInt(2, idEstudiante);
-            resp=ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return resp;
+            resp = ps.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+    return resp;
+}
+    
+    public int sumarHorasCumplidas(int idEstudiante, double horas) {
+    String sql = "UPDATE Estudiante SET horasCumplidas = horasCumplidas + ? WHERE idEstudiante = ?";
+    
+    try {
+        con = cn.Conexion();
+        ps = con.prepareStatement(sql);
+        ps.setDouble(1, horas);
+        ps.setInt(2, idEstudiante);
+        resp = ps.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return resp;
+}
 
 }

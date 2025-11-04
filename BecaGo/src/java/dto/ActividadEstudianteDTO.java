@@ -21,11 +21,12 @@ public class ActividadEstudianteDTO {
     private Timestamp fechaActividad;
     private int idInscripcion;
     private int horasDadas;
+    private int idEstudiante;
 
     public ActividadEstudianteDTO() {
     }
 
-    public ActividadEstudianteDTO(String nombreActividad, String nombreEstudiante, String apellidoEstudiante, String correoEstudiante, boolean estado, int cuposDisponibles, Timestamp fechaActividad, int idInscripcion, int horasDadas) {
+    public ActividadEstudianteDTO(String nombreActividad, String nombreEstudiante, String apellidoEstudiante, String correoEstudiante, boolean estado, int cuposDisponibles, Timestamp fechaActividad, int idInscripcion, int horasDadas, int idEstudiante) {
         this.nombreActividad = nombreActividad;
         this.nombreEstudiante = nombreEstudiante;
         this.apellidoEstudiante = apellidoEstudiante;
@@ -35,6 +36,7 @@ public class ActividadEstudianteDTO {
         this.fechaActividad = fechaActividad;
         this.idInscripcion = idInscripcion;
         this.horasDadas = horasDadas;
+        this.idEstudiante = idEstudiante;
     }
 
     public String getNombreActividad() {
@@ -107,6 +109,14 @@ public class ActividadEstudianteDTO {
 
     public void setHorasDadas(int horasDadas) {
         this.horasDadas = horasDadas;
+    }
+    
+    public int getIdEstudiante() {
+        return idEstudiante;
+    }
+
+    public void setIdEstudiante(int idEstudiante) {
+        this.idEstudiante = idEstudiante;
     }
 
     
