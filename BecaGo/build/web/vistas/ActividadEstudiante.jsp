@@ -12,7 +12,7 @@
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Actividades - BecaGo</title>
-    <link rel="stylesheet" type="text/css" href="resources/css/estilos.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/estilos.css?v=3">
 </head>
     <body>
         <nav>
@@ -21,7 +21,7 @@
                 <li><a href="Controlador?menu=Actividades%20Estudiante&accion=Listar">Actividades</a></li>
                 <li><a href="Controlador?menu=Inscripciones%20Estudiante&accion=Listar">Inscripciones</a></li>
                 <li><a href="Controlador?menu=Resumen&accion=Listar">Resumen</a></li>
-                 <li><a href="Controlador?menu=Perfil&accion=Mostrar">Mi Perfil</a></li>
+                <li><a href="Controlador?menu=Perfil&accion=Mostrar">Mi Perfil</a></li>
                 <li><a href="Controlador?menu=Logout">Logout</a></li>
             </ul>
         </nav>

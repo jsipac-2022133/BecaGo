@@ -6,9 +6,48 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
-    padding: 20px;
+    padding: 80px;
     gap: 30px;
     display: flex;
+}
+
+nav {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 13px 0 !important;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    margin: 0;
+}
+
+nav ul {
+    list-style: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    padding-right: 40px !important;
+    gap: 2rem !important;
+    margin: 0 !important;
+}
+
+nav ul li a {
+    color: #2c3e50 !important;
+    background-color: #e4f4e5 !important;
+    text-decoration: none !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    padding: 10px 25px !important; 
+    border-radius: 25px !important; 
+    transition: all 0.3s ease !important;
+    display: inline-block !important;
+}
+
+nav ul li a:hover {
+    background: #4CAF50 !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3)
 }
 
 h1.titlea {
@@ -40,7 +79,7 @@ input[type="password"],
 input[type="datetime-local"],
 input[type="number"],
 input[type="file"] {
-    width: 100%;
+    width: 110%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;

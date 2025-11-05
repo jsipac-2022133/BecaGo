@@ -12,6 +12,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Inscripciones</title>
+        <link rel="stylesheet" type="text/css" href="resources/css/estiloIN.css?v=4">
     </head>
     <body>
 

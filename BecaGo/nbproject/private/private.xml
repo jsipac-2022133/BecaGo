@@ -3,14 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Guti/OneDrive%20-%20UVG/Desktop/POO/BecaGo/BecaGo/src/java/controlador/Controlador.java</file>
-            <file>file:/C:/Users/Guti/OneDrive%20-%20UVG/Desktop/POO/BecaGo/BecaGo/web/vistas/PerfilUsuario.jsp</file>
-            <file>file:/C:/Users/Guti/OneDrive%20-%20UVG/Desktop/POO/BecaGo/BecaGo/web/resources/css/estiloP.css</file>
-            <file>file:/C:/Users/Guti/OneDrive%20-%20UVG/Desktop/POO/BecaGo/BecaGo/src/java/modeloDAO/ActividadDAO.java</file>
-            <file>file:/C:/Users/Guti/OneDrive%20-%20UVG/Desktop/POO/BecaGo/BecaGo/src/java/modeloDAO/InscripcionDAO.java</file>
-            <file>file:/C:/Users/Guti/OneDrive%20-%20UVG/Desktop/POO/BecaGo/BecaGo/web/vistas/Inscripcion.jsp</file>
-            <file>file:/C:/Users/Guti/OneDrive%20-%20UVG/Desktop/POO/BecaGo/BecaGo/src/java/dto/ActividadEstudianteDTO.java</file>
-            <file>file:/C:/Users/Guti/OneDrive%20-%20UVG/Desktop/POO/BecaGo/BecaGo/src/java/modeloDAO/EstudianteDAO.java</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/vistas/InformacionActividad.jsp</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/resources/css/estilos.css</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/vistas/Actividad.jsp</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/resources/css/estiloIN.css</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/vistas/InscripcionEstudiante.jsp</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/vistas/Inscripcion.jsp</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/vistas/Resumen.jsp</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/resources/css/estiloIE.css</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/resources/css/estiloRES.css</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/src/java/config/Conexion.java</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/resources/css/estiloA.css</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/resources/css/estiloIA.css</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/vistas/ActividadEstudiante.jsp</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/vistas/Home.jsp</file>
+            <file>file:/C:/Users/diego/OneDrive/Documents/beca%20penultimo/BecaGo/BecaGo/web/resources/css/estiloH.css</file>
         </group>
     </open-files>
 </project-private>

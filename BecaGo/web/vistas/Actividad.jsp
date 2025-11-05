@@ -12,7 +12,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Actividad - BecaGo</title>
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/estiloA.css"/>
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/estiloA.css?v=2"/>
     </head>
     <body class = "boda">
         
@@ -22,7 +22,7 @@
                 <li><a href="Controlador?menu=Actividad">Actividades</a></li>
                 <li><a href="Controlador?menu=Inscripcion&accion=Listar">Inscripciones</a></li>
                 <li><a href="#">Resumen</a></li>
-                <a href="Controlador?menu=Perfil&accion=Mostrar" class="profile-link">Mi Perfil</a>
+                <li><a href="Controlador?menu=Perfil&accion=Mostrar" class="profile-link">Mi Perfil</a></li>
                 <li><a href="Controlador?menu=Logout">Logout</a></li>
             </ul>
         </nav>

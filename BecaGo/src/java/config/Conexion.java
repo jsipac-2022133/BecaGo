@@ -18,7 +18,7 @@ public class Conexion {
     public Connection Conexion(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_becago?useSSL=false", "root", "luis1234");
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_becago?useSSL=false", "root", "botfer");
         } catch (Exception e) {
             e.printStackTrace();
         }

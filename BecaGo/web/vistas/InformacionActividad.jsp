@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title>${actividadIndividual.getNombreActividad()}</title>
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/estiloIA.css"/>
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/estiloIA.css?v=2"/>
         <style>
             /* Diego agrega estos estilos a tu documetno de css */
             .btn-inscribirse.disabled {
@@ -59,8 +59,9 @@ document.addEventListener("DOMContentLoaded", function() {
             <ul>
                 <li><a href="Controlador?menu=Home">Home</a></li>
                 <li><a href="Controlador?menu=Actividades%20Estudiante&accion=Listar">Actividades</a></li>
-                <li><a href="#">Inscripciones</a></li>
-                <li><a href="#">Resumen</a></li>
+                <li><a href="Controlador?menu=Inscripciones%20Estudiante&accion=Listar">Inscripciones</a></li>
+                <li><a href="Controlador?menu=Resumen&accion=Listar">Resumen</a></li>
+                <li><a href="Controlador?menu=Perfil&accion=Mostrar">Mi Perfil</a></li>
                 <li><a href="Controlador?menu=Logout">Logout</a></li>
             </ul>
         </nav>

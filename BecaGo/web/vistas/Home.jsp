@@ -13,7 +13,17 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/estiloH.css"/>
     </head>
     <body class = "bodyh">
-        <div>
+        <nav>
+            <ul>
+                <li><a href="Controlador?menu=Home">Home</a></li>
+                <li><a href="Controlador?menu=Actividades%20Estudiante&accion=Listar">Actividades</a></li>
+                <li><a href="Controlador?menu=Inscripciones%20Estudiante&accion=Listar">Inscripciones</a></li>
+                <li><a href="Controlador?menu=Resumen&accion=Listar">Resumen</a></li>
+                <li><a href="Controlador?menu=Perfil&accion=Mostrar">Mi Perfil</a></li>
+                <li><a href="Controlador?menu=Logout">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="main-content">
             <main>
                 <section class = "sec1">
                     <h1 class = "titleh">Bienvenido a BecaGo</h1>

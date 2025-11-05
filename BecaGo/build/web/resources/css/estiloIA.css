@@ -6,31 +6,51 @@
 
 .bodya {
     background:linear-gradient(to left,#43A047, #d4fccc, #d4fccc, #43A047);
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    justify-content: center;
+    align-items: center;
+    display: flex;
 }
 
 nav {
-    background-color: #43A047;
-    padding: 15px 0;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 13px 0 !important;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    margin: 0;
 }
 
 nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 40px;
-    gap: 30px;
+    list-style: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    padding-right: 40px !important;
+    gap: 2rem !important;
+    margin: 0 !important;
 }
 
 nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-    opacity: 0.9;
-    transition: opacity 0.3s;
+    color: #2c3e50 !important;
+    background-color: #e4f4e5 !important;
+    text-decoration: none !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    padding: 10px 25px !important; 
+    border-radius: 25px !important; 
+    transition: all 0.3s ease !important;
+    display: inline-block !important;
 }
 
 nav ul li a:hover {
-    opacity: 1;
+    background: #4CAF50 !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3)
 }
 
 .container-principal {
