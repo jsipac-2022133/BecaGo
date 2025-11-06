@@ -25,7 +25,11 @@
                 <li><a href="Controlador?menu=Logout">Logout</a></li>
             </ul>
         </nav>
-        
+        <c:if test="${empty actividades}">
+            <p style="text-align:center; font-size:18px; color:gray;">
+                No se han creado actividades aún.
+            </p>
+        </c:if>
         <div>
             <c:forEach var="actividad" items="${actividades}">
                 <a href="Controlador?menu=InformacionActividad&accion=Info%20Individual&idActividad=${actividad.getIdActividad()}">
